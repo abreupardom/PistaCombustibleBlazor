@@ -1,0 +1,181 @@
+@page "/tanqueform"
+@page "/tanqueform/{Id:int}"
+@rendermode InteractiveServer
+@using PistaCombustible.Models
+@using PistaCombustible.Services
+@using DevExpress.Blazor
+@inject TanqueService TanqueService
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+
+<PageTitle>Gestión de tanque</PageTitle>
+
+<div style="width: 80%;margin: auto;">
+    <h1>@(Id == null ? "Crear" : "Editar") tanque</h1>
+
+    <div class="card p-4 shadow">
+
+        <DxFormLayout CssClass="w-100 demo-form-layout">
+            <DxFormLayoutItem Caption="Capacidad:">
+                <DxSpinEdit @bind-Value="tanque.Capacidad" />
+            </DxFormLayoutItem>
+
+            <DxFormLayoutItem Caption="Nivel:">
+                 <DxSpinEdit @bind-Value="tanque.Nivel" />
+            </DxFormLayoutItem>
+
+            <DxFormLayoutItem Caption="Tipo Combustible:">
+                <DxComboBox 
+                    @bind-Value="tanque.TipoCombustible" 
+                    Data="@tiposCombustible" 
+                    TextFieldName="Nombre" 
+                    ValueFieldName="Valor"
+                    ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
+                    Placeholder="Seleccione un tipo de combustible" />
+            </DxFormLayoutItem>
+
+            <DxFormLayoutItem Caption="Activo:">
+                <DxCheckBox @bind-Checked="tanque.Activo" CheckType="CheckType.Switch"
+                            LabelPosition="LabelPosition.Left" />
+            </DxFormLayoutItem>
+        </DxFormLayout>
+
+        <div class="w-100 mx-0 mt-3 d-flex gap-2">
+            <DxButton RenderStyle="ButtonRenderStyle.Primary" Click="GuardarTanque">
+                <i class="me-2 bi bi-check-circle"></i> Guardar
+            </DxButton>
+            @if (Id == null)
+            {
+                <DxButton RenderStyle="ButtonRenderStyle.Secondary" Click="LimpiarFormulario">
+                    <i class="me-2 bi bi-arrow-counterclockwise"></i> Limpiar
+                </DxButton>
+            }
+            <DxButton RenderStyle="ButtonRenderStyle.Danger" Click="Cancelar">
+                <i class="me-2 bi bi-x-circle"></i> Cancelar
+            </DxButton>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public int? Id { get; set; }
+    private Tanque tanque = new();
+
+    private List<TipoCombustibleItem> tiposCombustible = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarTanques();
+        await CargarTiposCombustible();
+    }
+
+    /// <summary>
+    /// Carga tipos combustible
+    /// </summary>
+    /// <returns></returns>
+    private async Task CargarTiposCombustible()
+    {
+        tiposCombustible = new List<TipoCombustibleItem>
+        {
+            new TipoCombustibleItem { Valor = "Gasolina", Nombre = "Gasolina" },
+            new TipoCombustibleItem { Valor = "Diesel", Nombre = "Diesel" },
+        };
+    }
+
+    /// <summary>
+    /// Carga Tanquess
+    /// </summary>
+    /// <returns></returns>
+    private async Task CargarTanques()
+    {
+        try
+        {
+            if (Id != null)
+            {
+                tanque = await Task.Run(() => TanqueService.GetTanqueById(Id.Value));
+            }
+            else
+            {
+                tanque = new Tanque();
+                tanque.Activo = true;
+                tanque.FechaCreacion = DateTime.Now;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar tanque: {ex.Message}");
+            await JS.InvokeVoidAsync("alert", "Error al cargar el tanques");
+        }
+    }
+    
+    /// <summary>
+    /// Guarda o actualiza el Tanques
+    /// </summary>
+    private async Task GuardarTanque()
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(tanque.TipoCombustible) ||
+               tanque.Capacidad == null ||
+               tanque.Nivel == null)
+            {
+                await JS.InvokeVoidAsync("alert", "Por favor, complete todos los campos requeridos");
+                return;
+            }
+
+            if (tanque.Capacidad < tanque.Nivel)
+            {
+                await JS.InvokeVoidAsync("alert", "Por favor, el nivel del tanque debe ser menor o igual que la capacidad del tanque.");
+                return;
+            }
+
+            if (Id != null)
+            {
+                await Task.Run(() => TanqueService.UpdateTanque(tanque));
+                await JS.InvokeVoidAsync("alert", "Tanques actualizado correctamente");
+                Navigation.NavigateTo("/tanques");
+            }
+            else
+            {
+                await Task.Run(() => TanqueService.AddTanque(tanque));
+                await JS.InvokeVoidAsync("alert", "Tanques guardado correctamente");
+                LimpiarFormulario();
+            }
+        }
+        catch (Exception ex)
+        {
+            await JS.InvokeVoidAsync("alert", "Error al guardar tanques: " + ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Cancela el formulario
+    /// </summary>
+    private void LimpiarFormulario()
+    {
+        tanque = new Tanque()
+        {
+            Activo = true,
+            FechaCreacion = DateTime.Now
+        };
+    }
+
+    /// <summary>
+    /// Cancela el formulario
+    /// </summary>
+    private void Cancelar()
+    {
+        Navigation.NavigateTo("/tanques");
+    }
+
+    /// <summary>
+    /// Clase para tener el objeto tipo combustible
+    /// </summary>
+    public class TipoCombustibleItem
+    {
+        public string Valor { get; set; }
+        public string Nombre { get; set; }
+    }
+}

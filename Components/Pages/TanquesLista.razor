@@ -1,0 +1,143 @@
+@page "/tanques"
+@rendermode InteractiveServer
+@using PistaCombustible.Models
+@using PistaCombustible.Services
+@using DevExpress.Blazor
+@inject TanqueService TanqueService
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+
+<PageTitle>Gestión de tanques</PageTitle>
+
+
+<div style="width: 80%; margin: auto;">
+    <div class="d-flex align-items-center mb-3">
+        <h1 class="me-3 mb-0">Lista de tanques</h1>
+        <DxButton RenderStyle="ButtonRenderStyle.Primary" Size="ButtonSize.Small" Click="() => AdicionarTanque()"
+                  IconCssClass="bi bi-plus-circle" />
+            
+    </div>
+   
+    @if (TanqueLista == null)
+    {
+        <span>Cargando...</span>
+    }
+    else if (!TanqueLista.Any())
+    {
+        <div class="alert alert-warning">
+            No hay tanques registrados.
+        </div>
+    }
+    else
+    {
+        <DxGrid Data="TanqueLista" ShowFilterRow="true" AllowSort="true" AllowPaging="true" PageSize="10"
+                ShowPageSizeSelector="true" PageSizes="new int[] { 5, 10, 20, 50 }" AllowGroup="true" CssClass="shadow-sm"
+                ColumnCaptionAlignment="GridTextAlignment.Center" ShowSearchBox="true">
+        
+            <Columns>
+                <DxGridDataColumn FieldName="Id" Caption="ID" SortOrder="GridColumnSortOrder.Ascending" />
+            
+                <DxGridDataColumn FieldName="Capacidad" Caption="Capacidad" />
+            
+                <DxGridDataColumn FieldName="Nivel" Caption="Nivel" />
+
+                <DxGridDataColumn FieldName="TipoCombustible" Caption="Tipo combustible" />
+
+                <DxGridDataColumn FieldName="Activo" Caption="Estado">
+                    <CellDisplayTemplate>
+                        @if ((bool)context.Value)
+                        {
+                            <span class="badge bg-success">Activo</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Inactivo</span>
+                        }
+                    </CellDisplayTemplate>
+                </DxGridDataColumn>
+
+                <DxGridDataColumn FieldName="FechaCreacion" Caption="Fecha creación" />
+
+                <DxGridDataColumn Caption="Acciones" Width="120px">
+                    <CellDisplayTemplate>
+                        @{
+                            var Tanques = (Tanque)context.DataItem;
+                            <DxButton RenderStyle="ButtonRenderStyle.Danger" Size="ButtonSize.Small"
+                                      Click="() => EliminarTanque(Tanques.Id)" IconCssClass="bi bi-trash" />
+                            <DxButton RenderStyle="ButtonRenderStyle.Primary" Size="ButtonSize.Small"
+                                      Click="() => ActualizarTanque(Tanques.Id)" IconCssClass="bi bi-pen" />
+                        }
+                    </CellDisplayTemplate>
+                </DxGridDataColumn>
+            </Columns>
+        </DxGrid>
+        <span class="totalTanques d-block mt-3">@TanqueLista.Count() tanques en total</span>
+    }
+</div>
+
+@code {
+    private List<Tanque> TanqueLista = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarTanques();
+    }
+
+    /// <summary>
+    /// Carga Tanques
+    /// </summary>
+    /// <returns></returns>
+    private async Task CargarTanques()
+    {
+        try
+        {
+            TanqueLista = await Task.Run(() => TanqueService.GetTanques());
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar Tanque: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Elimina Tanques
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    private async Task EliminarTanque(int id)
+    {
+        var confirmado = await JS.InvokeAsync<bool>("confirm", "¿Está seguro de eliminar este Tanques?");
+
+        if (confirmado)
+        {
+            var success = await Task.Run(() => TanqueService.DeleteTanqueFisico(id));
+            if (success)
+            {
+                await CargarTanques();
+                await JS.InvokeVoidAsync("alert", "Tanques eliminado correctamente");
+            }
+            else
+            {
+                await JS.InvokeVoidAsync("alert", "Error al eliminar el Tanques");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Actualiza Tanque
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    private void ActualizarTanque(int id)
+    {
+        Navigation.NavigateTo($"/tanqueform/{id}");
+    }
+
+    /// <summary>
+    /// Adiciona Tanques
+    /// </summary>
+    private void AdicionarTanque()
+    {
+        Navigation.NavigateTo($"/tanqueform");
+    }
+}

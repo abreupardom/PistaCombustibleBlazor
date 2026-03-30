@@ -1,0 +1,212 @@
+@page "/asignacionesform"
+@page "/asignacionesform/{Id:int}"
+@rendermode InteractiveServer
+@using PistaCombustible.Models
+@using PistaCombustible.Services
+@using DevExpress.Blazor
+@inject AsignacionService AsignacionService
+@inject TanqueService TanqueService
+@inject VehiculoService VehiculoService
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+
+<PageTitle>Gestión de asignacion</PageTitle>
+
+<div style="width: 80%;margin: auto;">
+    <h1>@(Id == null ? "Crear" : "Editar") asignaciones</h1>
+
+    <div class="card p-4 shadow">
+
+        <DxFormLayout CssClass="w-100 demo-form-layout">
+           
+            <DxFormLayoutItem Caption="Tanque:">
+                <DxComboBox 
+                    @bind-Value="asignacion.Tanque" 
+                    Data="@tanques" 
+                    TextFieldName="tanque" 
+                    ValueFieldName="Id"
+                    ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
+                    Placeholder="Seleccione un tanque" />
+            </DxFormLayoutItem>
+
+             <DxFormLayoutItem Caption="Vehiculo:">
+                <DxComboBox 
+                    @bind-Value="asignacion.Vehiculo" 
+                    Data="@vehiculos" 
+                    TextFieldName="vehiculo" 
+                    ValueFieldName="Id"
+                    ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
+                    Placeholder="Seleccione un vehiculo" />
+            </DxFormLayoutItem>
+
+             <DxFormLayoutItem Caption="Litros:">
+                 <DxSpinEdit @bind-Value="asignacion.Litros" />
+            </DxFormLayoutItem>
+
+        </DxFormLayout>
+
+        <div class="w-100 mx-0 mt-3 d-flex gap-2">
+            <DxButton RenderStyle="ButtonRenderStyle.Primary" Click="GuardarAsignacion">
+                <i class="me-2 bi bi-check-circle"></i> Guardar
+            </DxButton>
+            @if (Id == null)
+            {
+                <DxButton RenderStyle="ButtonRenderStyle.Secondary" Click="LimpiarFormulario">
+                    <i class="me-2 bi bi-arrow-counterclockwise"></i> Limpiar
+                </DxButton>
+            }
+            <DxButton RenderStyle="ButtonRenderStyle.Danger" Click="Cancelar">
+                <i class="me-2 bi bi-x-circle"></i> Cancelar
+            </DxButton>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public int? Id { get; set; }
+    private Asignacion asignacion = new();
+
+    private List<TipoCombustibleItem> tiposCombustible = new();
+    private List<Tanque> tanques = new();
+     private List<Vehiculo> vehiculos = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarAsignaciones();
+        await CargarTiposCombustible();
+        await CargarTanques();
+        await CargarVehiculos();
+    }
+
+    /// <summary>
+    /// Carga tanques
+    /// </summary>
+    /// <returns></returns>
+    private async Task CargarTanques()
+    {
+        tanques = await Task.Run(() => TanqueService.GetTanques());
+    }
+
+     /// <summary>
+    /// Carga vehiculo
+    /// </summary>
+    /// <returns></returns>
+    private async Task CargarVehiculos()
+    {
+        vehiculos = await Task.Run(() =>VehiculoService.GetVehiculos());
+    }
+
+    /// <summary>
+    /// Carga tipos combustible
+    /// </summary>
+    /// <returns></returns>
+    private async Task CargarTiposCombustible()
+    {
+        tiposCombustible = new List<TipoCombustibleItem>
+        {
+            new TipoCombustibleItem { Valor = "Gasolina", Nombre = "Gasolina" },
+            new TipoCombustibleItem { Valor = "Diesel", Nombre = "Diesel" },
+        };
+    }
+
+    /// <summary>
+    /// Carga asignaciones
+    /// </summary>
+    /// <returns></returns>
+    private async Task CargarAsignaciones()
+    {
+        try
+        {
+            if (Id != null)
+            {
+                asignacion = await Task.Run(() => AsignacionService.GetAsignacionById(Id.Value));
+            }
+            else
+            {
+                asignacion = new Asignacion();
+                asignacion.FechaCreacion = DateTime.Now;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar asignaciones: {ex.Message}");
+            await JS.InvokeVoidAsync("alert", "Error al cargar el asignaciones");
+        }
+    }
+    
+    /// <summary>
+    /// Guarda o actualiza el asignacion
+    /// </summary>
+    private async Task GuardarAsignacion()
+    {
+        try
+        {
+            if (asignacion.Tanque == null ||
+               asignacion.Vehiculo == null || 
+               asignacion.Litros == null)
+            {
+                await JS.InvokeVoidAsync("alert", "Por favor, complete todos los campos requeridos");
+                return;
+            }
+
+            if(asignacion.Litros > tanques.Find(n=>n.Id == asignacion.Tanque).Nivel)
+            {
+                await JS.InvokeVoidAsync("alert", "Por favor, los litros asignados no puede ser mayor que el nivel del tanque.");
+                return;
+            }
+
+            if(tanques.Find(n=>n.Id == asignacion.Tanque).TipoCombustible != vehiculos.Find(n=>n.Id == asignacion.Vehiculo).TipoCombustible)
+            {
+                await JS.InvokeVoidAsync("alert", "Por favor, el tipo de combustible del vehiculo y del tanque debe ser el mismo.");
+                return;
+            }
+
+            if (Id != null)
+            {
+                await Task.Run(() => AsignacionService.UpdateAsignacion(asignacion));
+                await JS.InvokeVoidAsync("alert", "Asignacion actualizado correctamente");
+                Navigation.NavigateTo("/asignaciones");
+            }
+            else
+            {
+                await Task.Run(() => AsignacionService.AddAsignacion(asignacion));
+                await JS.InvokeVoidAsync("alert", "Asignaciones guardado correctamente");
+                LimpiarFormulario();
+            }
+        }
+        catch (Exception ex)
+        {
+            await JS.InvokeVoidAsync("alert", "Error al guardar asignacion: " + ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Cancela el formulario
+    /// </summary>
+    private void LimpiarFormulario()
+    {
+        asignacion = new Asignacion()
+        {
+            FechaCreacion = DateTime.Now
+        };
+    }
+
+    /// <summary>
+    /// Cancela el formulario
+    /// </summary>
+    private void Cancelar()
+    {
+        Navigation.NavigateTo("/asignaciones");
+    }
+
+    /// <summary>
+    /// Clase para tener el objeto tipo combustible
+    /// </summary>
+    public class TipoCombustibleItem
+    {
+        public string Valor { get; set; }
+        public string Nombre { get; set; }
+    }
+}

@@ -1,0 +1,130 @@
+@page "/asignaciones"
+@rendermode InteractiveServer
+@using PistaCombustible.Models
+@using PistaCombustible.Services
+@using DevExpress.Blazor
+@inject AsignacionService AsignacionService
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+
+<PageTitle>Gestión de asignaciones</PageTitle>
+
+
+<div style="width: 80%; margin: auto;">
+    <div class="d-flex align-items-center mb-3">
+        <h1 class="me-3 mb-0">Lista de asignaciones</h1>
+        <DxButton RenderStyle="ButtonRenderStyle.Primary" Size="ButtonSize.Small" Click="() => AdicionarAsignacion()"
+                  IconCssClass="bi bi-plus-circle" />
+            
+    </div>
+   
+    @if (AsignacionLista == null)
+    {
+        <span>Cargando...</span>
+    }
+    else if (!AsignacionLista.Any())
+    {
+        <div class="alert alert-warning">
+            No hay asignaciones registrados.
+        </div>
+    }
+    else
+    {
+        <DxGrid Data="AsignacionLista" ShowFilterRow="true" AllowSort="true" AllowPaging="true" PageSize="10"
+                ShowPageSizeSelector="true" PageSizes="new int[] { 5, 10, 20, 50 }" AllowGroup="true" CssClass="shadow-sm"
+                ColumnCaptionAlignment="GridTextAlignment.Center" ShowSearchBox="true">
+        
+            <Columns>
+                <DxGridDataColumn FieldName="Id" Caption="ID" SortOrder="GridColumnSortOrder.Ascending" />
+            
+                <DxGridDataColumn FieldName="tanqueCompleto" Caption="Tanque" />
+            
+                <DxGridDataColumn FieldName="vehiculoCompleto" Caption="Vehículo" />
+
+                <DxGridDataColumn FieldName="Litros" Caption="Litros" />
+
+                <DxGridDataColumn FieldName="FechaCreacion" Caption="Fecha creación" />
+
+                <DxGridDataColumn Caption="Acciones" Width="120px">
+                    <CellDisplayTemplate>
+                        @{
+                            var Asignacion = (Asignacion)context.DataItem;
+                            <DxButton RenderStyle="ButtonRenderStyle.Danger" Size="ButtonSize.Small"
+                                      Click="() => EliminarAsignacion(Asignacion.Id)" IconCssClass="bi bi-trash" />
+                            <DxButton RenderStyle="ButtonRenderStyle.Primary" Size="ButtonSize.Small"
+                                      Click="() => ActualizarAsignacion(Asignacion.Id)" IconCssClass="bi bi-pen" />
+                        }
+                    </CellDisplayTemplate>
+                </DxGridDataColumn>
+            </Columns>
+        </DxGrid>
+        <span class="totalAsignacion d-block mt-3">@AsignacionLista.Count() asignaciones en total</span>
+    }
+</div>
+
+@code {
+    private List<Asignacion> AsignacionLista = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarAsignacion();
+    }
+
+    /// <summary>
+    /// Carga asignacion
+    /// </summary>
+    /// <returns></returns>
+    private async Task CargarAsignacion()
+    {
+        try
+        {
+            AsignacionLista = await Task.Run(() => AsignacionService.GetAsignaciones());
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar asignación: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Elimina asignacion
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    private async Task EliminarAsignacion(int id)
+    {
+        var confirmado = await JS.InvokeAsync<bool>("confirm", "¿Está seguro de eliminar esta asignación?");
+
+        if (confirmado)
+        {
+            var success = await Task.Run(() => AsignacionService.DeleteAsignacionFisico(id));
+            if (success)
+            {
+                await CargarAsignacion();
+                await JS.InvokeVoidAsync("alert", "Asignación eliminado correctamente");
+            }
+            else
+            {
+                await JS.InvokeVoidAsync("alert", "Error al eliminar la asignación");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Actualiza asignacion
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    private void ActualizarAsignacion(int id)
+    {
+        Navigation.NavigateTo($"/asignacionesform/{id}");
+    }
+
+    /// <summary>
+    /// Adiciona asignacion
+    /// </summary>
+    private void AdicionarAsignacion()
+    {
+        Navigation.NavigateTo($"/asignacionesform");
+    }
+}

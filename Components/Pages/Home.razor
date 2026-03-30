@@ -1,0 +1,113 @@
+﻿@page "/"
+
+@using PistaCombustible.Models
+@using PistaCombustible.Services
+@using DevExpress.Blazor
+@inject EmpleadoService EmpleadoService
+
+<PageTitle>Gráfico de Empleados</PageTitle>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1>Análisis de Empleados</h1>
+            <hr />
+        </div>
+    </div>
+
+    @if (EmpleadoLista == null)
+    {
+        <div class="alert alert-info">
+            Cargando datos...
+        </div>
+    }
+    else if (!EmpleadoLista.Any())
+    {
+        <div class="alert alert-warning">
+            No hay empleados registrados.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Distribución de Empleados</h4>
+                    </div>
+                    <div class="card-body">
+                        @{
+                            var datosGrafico = new List<EmpleadoEstado>
+                            {
+                                new EmpleadoEstado { Estado = "Activos", Cantidad = EmpleadoLista.Count(e => e.Activo) },
+                                new EmpleadoEstado { Estado = "Inactivos", Cantidad = EmpleadoLista.Count(e => !e.Activo) }
+                            };
+                        }
+                        
+                        <DxChart Data="@datosGrafico"
+                                 Width="100%"
+                                 Height="450px">
+                            
+                            <DxChartBarSeries Name="Empleados"
+                                              ArgumentField="@((EmpleadoEstado e) => e.Estado)"
+                                              ValueField="@((EmpleadoEstado e) => e.Cantidad)"
+                                              Color="System.Drawing.Color.SteelBlue">
+                            
+                            </DxChartBarSeries>
+                            
+                            <DxChartLegend Visible="false" />
+                            <DxChartTooltip Enabled="true" />
+                        </DxChart>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card shadow-sm text-center">
+                    <div class="card-body">
+                        <h3>Empleados Activos</h3>
+                        <h2 class="text-success display-4">@EmpleadoLista.Count(e => e.Activo)</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow-sm text-center">
+                    <div class="card-body">
+                        <h3>Empleados Inactivos</h3>
+                        <h2 class="text-danger display-4">@EmpleadoLista.Count(e => !e.Activo)</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<Empleado> EmpleadoLista = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarEmpleados();
+    }
+
+    private async Task CargarEmpleados()
+    {
+        try
+        {
+            EmpleadoLista = await Task.Run(() => EmpleadoService.GetEmpleados());
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar empleados: {ex.Message}");
+        }
+    }
+
+    // Clase auxiliar para el gráfico
+    public class EmpleadoEstado
+    {
+        public string? Estado { get; set; }
+        public int Cantidad { get; set; }
+    }
+}

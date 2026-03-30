@@ -1,0 +1,202 @@
+@page "/vehiculoform"
+@page "/vehiculoform/{Id:int}"
+@rendermode InteractiveServer
+@using PistaCombustible.Models
+@using PistaCombustible.Services
+@using DevExpress.Blazor
+@inject VehiculoService VehiculoService
+@inject EmpleadoService EmpleadoService
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+
+<PageTitle>Gestión de vehiculo</PageTitle>
+
+<div style="width: 80%;margin: auto;">
+    <h1>@(Id == null ? "Crear" : "Editar") vehículo</h1>
+
+    <div class="card p-4 shadow">
+
+        <DxFormLayout CssClass="w-100 demo-form-layout">
+            <DxFormLayoutItem Caption="Marca:">
+                <DxTextBox @bind-Text="vehiculo.Marca" />
+            </DxFormLayoutItem>
+
+            <DxFormLayoutItem Caption="Modelo:">
+                <DxTextBox @bind-Text="vehiculo.Modelo" />
+            </DxFormLayoutItem>
+
+            <DxFormLayoutItem Caption="Matricula:">
+                <DxTextBox @bind-Text="vehiculo.Matricula" />
+            </DxFormLayoutItem>
+
+            <DxFormLayoutItem Caption="Tipo Combustible:">
+                <DxComboBox 
+                    @bind-Value="vehiculo.TipoCombustible" 
+                    Data="@tiposCombustible" 
+                    TextFieldName="Nombre" 
+                    ValueFieldName="Valor"
+                    ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
+                    Placeholder="Seleccione un tipo de combustible" />
+            </DxFormLayoutItem>
+
+             <DxFormLayoutItem Caption="Chofer:">
+                <DxComboBox 
+                    @bind-Value="vehiculo.IdEmpleado" 
+                    Data="@empleados" 
+                    TextFieldName="Nombre" 
+                    ValueFieldName="Id"
+                    ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
+                    Placeholder="Seleccione un empleado" />
+            </DxFormLayoutItem>
+
+            <DxFormLayoutItem Caption="Activo:">
+                <DxCheckBox @bind-Checked="vehiculo.Activo" CheckType="CheckType.Switch"
+                            LabelPosition="LabelPosition.Left" />
+            </DxFormLayoutItem>
+        </DxFormLayout>
+
+        <div class="w-100 mx-0 mt-3 d-flex gap-2">
+            <DxButton RenderStyle="ButtonRenderStyle.Primary" Click="GuardarVehiculo">
+                <i class="me-2 bi bi-check-circle"></i> Guardar
+            </DxButton>
+            @if (Id == null)
+            {
+                <DxButton RenderStyle="ButtonRenderStyle.Secondary" Click="LimpiarFormulario">
+                    <i class="me-2 bi bi-arrow-counterclockwise"></i> Limpiar
+                </DxButton>
+            }
+            <DxButton RenderStyle="ButtonRenderStyle.Danger" Click="Cancelar">
+                <i class="me-2 bi bi-x-circle"></i> Cancelar
+            </DxButton>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public int? Id { get; set; }
+    private Vehiculo vehiculo = new();
+
+    private List<TipoCombustibleItem> tiposCombustible = new();
+    private List<Empleado> empleados = new ();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarVehiculos();
+        await CargarTiposCombustible();
+        await CargarEmpleados();
+    }
+
+    /// <summary>
+    /// Carga tipos combustible
+    /// </summary>
+    /// <returns></returns>
+    private async Task CargarTiposCombustible()
+    {
+        tiposCombustible = new List<TipoCombustibleItem>
+        {
+            new TipoCombustibleItem { Valor = "Gasolina", Nombre = "Gasolina" },
+            new TipoCombustibleItem { Valor = "Diesel", Nombre = "Diesel" },
+        };
+    }
+
+    /// <summary>
+    /// Carga empleados
+    /// </summary>
+    /// <returns></returns>
+    private async Task CargarEmpleados()
+    {
+        empleados = await Task.Run(() => EmpleadoService.GetEmpleados());
+    }
+
+    /// <summary>
+    /// Carga vehículos
+    /// </summary>
+    /// <returns></returns>
+    private async Task CargarVehiculos()
+    {
+        try
+        {
+            if (Id != null)
+            {
+                vehiculo = await Task.Run(() => VehiculoService.GetVehiculoById(Id.Value));
+            }
+            else
+            {
+                vehiculo = new Vehiculo();
+                vehiculo.Activo = true;
+                vehiculo.FechaCreacion = DateTime.Now;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar vehiculo: {ex.Message}");
+            await JS.InvokeVoidAsync("alert", "Error al cargar el vehículo");
+        }
+    }
+    
+    /// <summary>
+    /// Guarda o actualiza el vehículo
+    /// </summary>
+    private async Task GuardarVehiculo()
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(vehiculo.Marca) ||
+                string.IsNullOrWhiteSpace(vehiculo.Modelo) ||
+                string.IsNullOrWhiteSpace(vehiculo.Matricula) ||
+                string.IsNullOrWhiteSpace(vehiculo.TipoCombustible))
+            {
+                await JS.InvokeVoidAsync("alert", "Por favor, complete todos los campos requeridos");
+                return;
+            }
+
+            if (Id != null)
+            {
+                await Task.Run(() => VehiculoService.UpdateVehiculo(vehiculo));
+                await JS.InvokeVoidAsync("alert", "Vehículo actualizado correctamente");
+                Navigation.NavigateTo("/vehiculos");
+            }
+            else
+            {
+                await Task.Run(() => VehiculoService.AddVehiculo(vehiculo));
+                await JS.InvokeVoidAsync("alert", "Vehículo guardado correctamente");
+                LimpiarFormulario();
+            }
+        }
+        catch (Exception ex)
+        {
+            await JS.InvokeVoidAsync("alert", "Error al guardar vehículo: " + ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Cancela el formulario
+    /// </summary>
+    private void LimpiarFormulario()
+    {
+        vehiculo = new Vehiculo()
+        {
+            Activo = true,
+            FechaCreacion = DateTime.Now
+        };
+    }
+
+    /// <summary>
+    /// Cancela el formulario
+    /// </summary>
+    private void Cancelar()
+    {
+        Navigation.NavigateTo("/vehiculos");
+    }
+
+    /// <summary>
+    /// Clase para tener el objeto tipo combustible
+    /// </summary>
+    public class TipoCombustibleItem
+    {
+        public string Valor { get; set; }
+        public string Nombre { get; set; }
+    }
+}

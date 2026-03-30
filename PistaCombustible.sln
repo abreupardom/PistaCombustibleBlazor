@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PistaCombustible", "PistaCombustible.csproj", "{9ACBADC4-3357-FA4F-EB25-5E19F40B14CC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9ACBADC4-3357-FA4F-EB25-5E19F40B14CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ACBADC4-3357-FA4F-EB25-5E19F40B14CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ACBADC4-3357-FA4F-EB25-5E19F40B14CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ACBADC4-3357-FA4F-EB25-5E19F40B14CC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8746DCE5-C3D9-4C79-B057-8BDCFBBD15D6}
+	EndGlobalSection
+EndGlobal
