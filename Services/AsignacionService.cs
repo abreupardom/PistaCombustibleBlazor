@@ -111,6 +111,7 @@ namespace PistaCombustible.Services
             var resultado = _conexion.EjecutarEscalar(query, parametros);
             if (Convert.ToInt32(resultado) > 0)
             {
+                // Actualizar el nivel del tanque restar los litros de la asignación eliminada
                 query = @"
                     UPDATE Tanques
                     SET Nivel = Nivel - @Litros
@@ -166,6 +167,7 @@ namespace PistaCombustible.Services
 
             if (filasAfectadas > 0)
             {
+                // Actualizar el nivel del tanque sumando los litros de la asignación anterior y restando los litros de la asignación actualizada
                 query = @"
                     UPDATE Tanques
                     SET Nivel = Nivel + @asignacionLitros - @Litros
@@ -188,14 +190,31 @@ namespace PistaCombustible.Services
         /// <summary>
         /// Eliminar asignacion físicamente (borrado permanente)
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="asignacion"></param>
         /// <returns></returns>
-        public bool DeleteAsignacionFisico(int id)
+        public bool DeleteAsignacionFisico(Asignacion asignacion)
         {
             string query = "DELETE FROM Asignaciones WHERE Id = @Id";
-            var parametros = new SqlParameter[] { new SqlParameter("@Id", id) };
+            var parametros = new SqlParameter[] { new SqlParameter("@Id", asignacion.Id) };
 
             int filasAfectadas = _conexion.EjecutarComando(query, parametros);
+            if (filasAfectadas > 0)
+            {
+                // Actualizar el nivel del tanque sumando los litros de la asignación eliminada
+                query = @"
+                    UPDATE Tanques
+                    SET Nivel = Nivel + @Litros
+                    WHERE
+                      Id = @Id";
+
+                parametros = new SqlParameter[]
+                {
+                    new SqlParameter("@Id", asignacion.Tanque),
+                    new SqlParameter("@Litros", asignacion.Litros),
+                };
+
+                _conexion.EjecutarEscalar(query, parametros);
+            }
             return filasAfectadas > 0;
         }
 

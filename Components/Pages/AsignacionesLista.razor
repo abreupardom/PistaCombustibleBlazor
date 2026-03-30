@@ -6,6 +6,7 @@
 @inject AsignacionService AsignacionService
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
+@inject IToastNotificationService ToastService
 
 <PageTitle>Gestión de asignaciones</PageTitle>
 
@@ -75,7 +76,7 @@
                             <DxButton 
                             RenderStyle="ButtonRenderStyle.Danger" 
                             Size="ButtonSize.Small"
-                            Click="() => EliminarAsignacion(Asignacion.Id)" 
+                            Click="() => EliminarAsignacion(Asignacion)" 
                             IconCssClass="bi bi-trash" />
 
                             <DxButton 
@@ -90,6 +91,7 @@
         </DxGrid>
         <span class="totalAsignacion d-block mt-3">@AsignacionLista.Count() asignaciones en total</span>
     }
+    <GlobalToast/>
 </div>
 
 @code {
@@ -121,17 +123,23 @@
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    private async Task EliminarAsignacion(int id)
+    private async Task EliminarAsignacion(Asignacion asignacion)
     {
         var confirmado = await JS.InvokeAsync<bool>("confirm", "¿Está seguro de eliminar esta asignación?");
 
         if (confirmado)
         {
-            var success = await Task.Run(() => AsignacionService.DeleteAsignacionFisico(id));
+            var success = await Task.Run(() => AsignacionService.DeleteAsignacionFisico(asignacion));
             if (success)
             {
                 await CargarAsignacion();
-                await JS.InvokeVoidAsync("alert", "Asignación eliminado correctamente");
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",  
+                    Text = "Asignación eliminada correctamente.",
+                    RenderStyle = ToastRenderStyle.Success
+                }); 
             }
             else
             {

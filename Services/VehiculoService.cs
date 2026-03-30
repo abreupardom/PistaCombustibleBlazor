@@ -105,7 +105,7 @@ namespace PistaCombustible.Services
         {
             string query = @"
                 INSERT INTO Vehiculos (Marca, Modelo, Matricula, Activo, TipoCombustible,  IdEmpleado, FechaCreacion)
-                VALUES (@Marca, @Modelo, @Matricula, @Activo,  IdEmpleado,@TipoCombustible, GETDATE());
+                VALUES (@Marca, @Modelo, @Matricula, @Activo, @TipoCombustible, @IdEmpleado, GETDATE());
                 SELECT SCOPE_IDENTITY();";
 
             var parametros = new SqlParameter[]

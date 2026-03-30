@@ -6,6 +6,7 @@
 @inject VehiculoService VehiculoService
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
+@inject IToastNotificationService ToastService
 
 <PageTitle>Gestión de vehículos</PageTitle>
 
@@ -115,6 +116,7 @@
         </DxGrid>
         <span class="totalVehiculos d-block mt-3">@VehiculoLista.Count() vehículos en total</span>
     }
+    <GlobalToast/>
 </div>
 
 @code {
@@ -156,7 +158,13 @@
             if (success)
             {
                 await CargarVehiculos();
-                await JS.InvokeVoidAsync("alert", "Vehiculos eliminado correctamente");
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",  
+                    Text = "Vehiculo eliminado correctamente.",
+                    RenderStyle = ToastRenderStyle.Success
+                }); 
             }
             else
             {

@@ -8,6 +8,7 @@
 @inject EmpleadoService EmpleadoService
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
+@inject IToastNotificationService ToastService
 
 <PageTitle>Gestión de vehiculo</PageTitle>
 
@@ -19,25 +20,25 @@
         <DxFormLayout 
         CssClass="w-100 demo-form-layout">
             <DxFormLayoutItem 
-              Caption="Marca:">
+              Caption="* Marca:">
                 <DxTextBox 
                 @bind-Text="vehiculo.Marca" />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
-                Caption="Modelo:">
+                Caption="* Modelo:">
                 <DxTextBox 
                 @bind-Text="vehiculo.Modelo" />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
-             Caption="Matricula:">
+             Caption="* Matricula:">
                 <DxTextBox 
                 @bind-Text="vehiculo.Matricula" />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
-              Caption="Tipo Combustible:">
+              Caption="* Tipo Combustible:">
                 <DxComboBox 
                     @bind-Value="vehiculo.TipoCombustible" 
                     Data="@tiposCombustible" 
@@ -48,7 +49,7 @@
             </DxFormLayoutItem>
 
              <DxFormLayoutItem 
-                Caption="Chofer:">
+                Caption="* Chofer:">
                     <DxComboBox 
                         @bind-Value="vehiculo.IdEmpleado" 
                         Data="@empleados" 
@@ -88,6 +89,7 @@
             </DxButton>
         </div>
     </div>
+    <GlobalToast />
 </div>
 
 @code {
@@ -164,22 +166,42 @@
             if (string.IsNullOrWhiteSpace(vehiculo.Marca) ||
                 string.IsNullOrWhiteSpace(vehiculo.Modelo) ||
                 string.IsNullOrWhiteSpace(vehiculo.Matricula) ||
-                string.IsNullOrWhiteSpace(vehiculo.TipoCombustible))
+                string.IsNullOrWhiteSpace(vehiculo.TipoCombustible)||
+                vehiculo.IdEmpleado == 0)
             {
-                await JS.InvokeVoidAsync("alert", "Por favor, complete todos los campos requeridos");
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",
+                    Text = "Por favor, complete todos los campos requeridos.",
+                    RenderStyle = ToastRenderStyle.Danger
+                });
                 return;
             }
 
             if (Id != null)
             {
                 await Task.Run(() => VehiculoService.UpdateVehiculo(vehiculo));
-                await JS.InvokeVoidAsync("alert", "Vehículo actualizado correctamente");
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",
+                    Text = "Vehículo actualizado correctamente.",
+                    RenderStyle = ToastRenderStyle.Success
+                });
+                await Task.Delay(1000);
                 Navigation.NavigateTo("/vehiculos");
             }
             else
             {
                 await Task.Run(() => VehiculoService.AddVehiculo(vehiculo));
-                await JS.InvokeVoidAsync("alert", "Vehículo guardado correctamente");
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",
+                    Text = "Vehículo guardado correctamente.",
+                    RenderStyle = ToastRenderStyle.Success
+                });
                 LimpiarFormulario();
             }
         }

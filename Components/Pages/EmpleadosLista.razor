@@ -6,6 +6,7 @@
 @inject EmpleadoService EmpleadoService
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
+@inject IToastNotificationService ToastService
 
 <PageTitle>Gestión de empleados</PageTitle>
 
@@ -122,6 +123,7 @@
         </DxGrid>
         <span class="totalEmpleado d-block mt-3">@EmpleadoLista.Count() empleados en total</span>
     }
+    <GlobalToast/>
 </div>
 
 @code {
@@ -163,7 +165,13 @@
             if (success)
             {
                 await CargarEmpleados();
-                await JS.InvokeVoidAsync("alert", "Empleado eliminado correctamente");
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",  
+                    Text = "Empleado eliminado correctamente.",
+                    RenderStyle = ToastRenderStyle.Success
+                }); 
             }
             else
             {

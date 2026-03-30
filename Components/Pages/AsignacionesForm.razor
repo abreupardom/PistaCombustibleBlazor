@@ -21,7 +21,7 @@
         <DxFormLayout CssClass="w-100 demo-form-layout">
            
             <DxFormLayoutItem
-             Caption="Tanque:">
+             Caption="* Tanque:">
                 <DxComboBox
                  @bind-Value="asignacion.Tanque"
                  Data="@tanques"
@@ -32,7 +32,7 @@
             </DxFormLayoutItem>
 
             <DxFormLayoutItem
-             Caption="Vehiculo:">
+             Caption="* Vehiculo:">
                 <DxComboBox
                  @bind-Value="asignacion.Vehiculo" 
                  Data="@vehiculos" 
@@ -42,7 +42,7 @@
                  Placeholder="Seleccione un vehiculo" />
             </DxFormLayoutItem>
 
-            <DxFormLayoutItem Caption="Litros:">
+            <DxFormLayoutItem Caption="* Litros:">
                 <DxSpinEdit 
                  @bind-Value="asignacion.Litros" />
             </DxFormLayoutItem>
@@ -70,14 +70,7 @@
             </DxButton>
         </div>
     </div>
-    <DxToastProvider
-     Name="Notificacion"
-     MaxToastCount="3"
-     DisplayTime="@TimeSpan.FromSeconds(5)"
-     FreezeOnClick="true"
-     HorizontalAlignment="HorizontalAlignment.Center"
-     VerticalAlignment="VerticalEdge.Top"
-     ShowCloseButton="true" />
+     <GlobalToast />
 </div>
 
 @code {
@@ -209,6 +202,7 @@
                     Text = "Asignacion actualizada correctamente.",
                     RenderStyle = ToastRenderStyle.Success
                 });
+                await Task.Delay(1000);
                 Navigation.NavigateTo($"/asignaciones");
             }
             else

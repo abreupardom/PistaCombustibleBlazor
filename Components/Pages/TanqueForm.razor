@@ -7,6 +7,7 @@
 @inject TanqueService TanqueService
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
+@inject IToastNotificationService ToastService
 
 <PageTitle>Gestión de tanque</PageTitle>
 
@@ -17,19 +18,19 @@
 
         <DxFormLayout CssClass="w-100 demo-form-layout">
             <DxFormLayoutItem 
-                Caption="Capacidad:">
+                Caption="* Capacidad:">
                 <DxSpinEdit 
                 @bind-Value="tanque.Capacidad" />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
-                Caption="Nivel:">
+                Caption="* Nivel:">
                  <DxSpinEdit 
                  @bind-Value="tanque.Nivel" />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
-                Caption="Tipo Combustible:">
+                Caption="* Tipo Combustible:">
                 <DxComboBox 
                     @bind-Value="tanque.TipoCombustible" 
                     Data="@tiposCombustible" 
@@ -69,6 +70,7 @@
             </DxButton>
         </div>
     </div>
+    <GlobalToast />
 </div>
 
 @code {
@@ -135,26 +137,51 @@
                tanque.Capacidad == null ||
                tanque.Nivel == null)
             {
-                await JS.InvokeVoidAsync("alert", "Por favor, complete todos los campos requeridos");
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",
+                    Text = "Por favor, complete todos los campos requeridos.",
+                    RenderStyle = ToastRenderStyle.Danger
+                });
                 return;
             }
 
             if (tanque.Capacidad < tanque.Nivel)
             {
-                await JS.InvokeVoidAsync("alert", "Por favor, el nivel del tanque debe ser menor o igual que la capacidad del tanque.");
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",
+                    Text = "Por favor, el nivel del tanque debe ser menor o igual que la capacidad del tanque.",
+                    RenderStyle = ToastRenderStyle.Warning
+                });
                 return;
             }
 
             if (Id != null)
             {
                 await Task.Run(() => TanqueService.UpdateTanque(tanque));
-                await JS.InvokeVoidAsync("alert", "Tanques actualizado correctamente");
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",
+                    Text = "Tanque actualizado correctamente.",
+                    RenderStyle = ToastRenderStyle.Success
+                });
+                await Task.Delay(1000);
                 Navigation.NavigateTo("/tanques");
             }
             else
             {
                 await Task.Run(() => TanqueService.AddTanque(tanque));
-                await JS.InvokeVoidAsync("alert", "Tanques guardado correctamente");
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",
+                    Text = "Tanque guardado correctamente.",
+                    RenderStyle = ToastRenderStyle.Success
+                });
                 LimpiarFormulario();
             }
         }

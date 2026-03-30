@@ -7,6 +7,7 @@
 @inject EmpleadoService EmpleadoService
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
+@inject IToastNotificationService ToastService
 
 <PageTitle>Gestión de empleados</PageTitle>
 
@@ -18,25 +19,25 @@
         <DxFormLayout 
         CssClass="w-100 demo-form-layout">
             <DxFormLayoutItem 
-             Caption="Nombre:">
+             Caption="* Nombre:">
                 <DxTextBox 
                 @bind-Text="empleado.Nombre" />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
-             Caption="Apellido:">
+             Caption="* Apellido:">
                 <DxTextBox 
                 @bind-Text="empleado.Apellido" />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
-              Caption="Email:">
+              Caption="* Email:">
                 <DxTextBox 
                 @bind-Text="empleado.Email" />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
-              Caption="Fecha de Nacimiento:">
+              Caption="* Fecha de Nacimiento:">
                 <DxDateEdit 
                 @bind-Date="empleado.FechaNacimiento" 
                 DisplayFormat="dd/MM/yyyy"
@@ -44,7 +45,7 @@
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
-              Caption="Salario:">
+              Caption="* Salario:">
                 <DxSpinEdit 
                 @bind-Value="empleado.Salario" 
                 DisplayFormat="c" 
@@ -81,6 +82,7 @@
             </DxButton>
         </div>
     </div>
+    <GlobalToast />
 </div>
 
 @code {
@@ -131,21 +133,55 @@
                 empleado.FechaNacimiento == null ||
                 empleado.Salario == null)
             {
-                await JS.InvokeVoidAsync("alert", "Por favor, complete todos los campos requeridos");
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",
+                    Text = "Por favor, complete todos los campos requeridos.",
+                    RenderStyle = ToastRenderStyle.Danger
+                });
+                
+                return;
+            }
+            Empleado? empleadoExistente = EmpleadoService.GetEmpleados().Find(e => e.Email == empleado.Email && e.Id != empleado.Id);
+            if(empleadoExistente != null)
+            {
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",
+                    Text = "Por favor, el correo electrónico ya existe.",
+                    RenderStyle = ToastRenderStyle.Warning
+                });
                 return;
             }
 
             if (Id != null)
             {
                 await Task.Run(() => EmpleadoService.UpdateEmpleado(empleado));
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",
+                    Text = "Empleado actualizado correctamente.",
+                    RenderStyle = ToastRenderStyle.Success
+                });
+                await Task.Delay(1000);
                 Navigation.NavigateTo($"/empleados");
             }
             else
             {
                 await Task.Run(() => EmpleadoService.AddEmpleado(empleado));
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",
+                    Text = "Empleado creado correctamente.",
+                    RenderStyle = ToastRenderStyle.Success
+                });
                 LimpiarFormulario();
             }
-            await JS.InvokeVoidAsync("alert", "Empleado guardado correctamente");
+            
         }
         catch (Exception ex)
         {
