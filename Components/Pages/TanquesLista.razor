@@ -6,6 +6,7 @@
 @inject TanqueService TanqueService
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
+@inject IToastNotificationService ToastService
 
 <PageTitle>Gestión de tanques</PageTitle>
 
@@ -33,7 +34,9 @@
     }
     else
     {
+        <ExportarGrid Grid="Grid" FileName="Listado de tanques"/>
         <DxGrid 
+        @ref="Grid"
         Data="TanqueLista" 
         ShowFilterRow="true" 
         AllowSort="true" 
@@ -106,9 +109,11 @@
         </DxGrid>
         <span class="totalTanques d-block mt-3">@TanqueLista.Count() tanques en total</span>
     }
+    <GlobalToast/>
 </div>
 
 @code {
+    IGrid Grid { get; set; }
     private List<Tanque> TanqueLista = new();
 
     protected override async Task OnInitializedAsync()
@@ -125,6 +130,7 @@
         try
         {
             TanqueLista = await Task.Run(() => TanqueService.GetTanques());
+            StateHasChanged();
         }
         catch (Exception ex)
         {
@@ -139,20 +145,44 @@
     /// <returns></returns>
     private async Task EliminarTanque(int id)
     {
-        var confirmado = await JS.InvokeAsync<bool>("confirm", "¿Está seguro de eliminar este Tanques?");
+        try{
+            var confirmado = await JS.InvokeAsync<bool>("confirm", "¿Está seguro de eliminar este Tanques?");
 
-        if (confirmado)
+            if (confirmado)
+            {
+                var success = await Task.Run(() => TanqueService.DeleteTanqueFisico(id));
+                if (success)
+                {
+                    await CargarTanques();
+                    ToastService.ShowToast(new ToastOptions
+                    {
+                        ProviderName = "Notificacion",
+                        Title = "Información",  
+                        Text = "Tanque eliminado correctamente.",
+                        RenderStyle = ToastRenderStyle.Success
+                    }); 
+                }
+                else
+                {
+                    ToastService.ShowToast(new ToastOptions
+                    {
+                        ProviderName = "Notificacion",
+                        Title = "Información",  
+                        Text = "Error al eliminar el Tanques.",
+                        RenderStyle = ToastRenderStyle.Success
+                    }); 
+                }
+            }
+        }
+        catch(Exception ex)
         {
-            var success = await Task.Run(() => TanqueService.DeleteTanqueFisico(id));
-            if (success)
+            ToastService.ShowToast(new ToastOptions
             {
-                await CargarTanques();
-                await JS.InvokeVoidAsync("alert", "Tanques eliminado correctamente");
-            }
-            else
-            {
-                await JS.InvokeVoidAsync("alert", "Error al eliminar el Tanques");
-            }
+                ProviderName = "Notificacion",
+                Title = "Información",  
+                Text = "Error al eliminar el Tanques: Esta siendo usado por alguna asignación.",
+                RenderStyle = ToastRenderStyle.Danger
+            }); 
         }
     }
 

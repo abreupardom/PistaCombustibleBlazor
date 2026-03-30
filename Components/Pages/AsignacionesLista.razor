@@ -3,6 +3,7 @@
 @using PistaCombustible.Models
 @using PistaCombustible.Services
 @using DevExpress.Blazor
+
 @inject AsignacionService AsignacionService
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
@@ -34,7 +35,10 @@
     }
     else
     {
+       
+        <ExportarGrid Grid="Grid" FileName="Listado de asignaciones"/>
         <DxGrid 
+        @ref="Grid"
         Data="AsignacionLista" 
         ShowFilterRow="true" 
         AllowSort="true" 
@@ -95,6 +99,8 @@
 </div>
 
 @code {
+
+    IGrid Grid { get; set; }
     private List<Asignacion> AsignacionLista = new();
 
     protected override async Task OnInitializedAsync()
@@ -111,6 +117,7 @@
         try
         {
             AsignacionLista = await Task.Run(() => AsignacionService.GetAsignaciones());
+            StateHasChanged();
         }
         catch (Exception ex)
         {

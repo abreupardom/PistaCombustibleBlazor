@@ -1,0 +1,43 @@
+@rendermode InteractiveServer
+@using DevExpress.Blazor
+@using DevExpress.Export
+
+<DxDropDownButton 
+ Text="Exportar" 
+ RenderStyle="ButtonRenderStyle.Primary" 
+ CssClass="mb-3"
+ IconCssClass="bi bi-share">
+    <Items>
+        <DxDropDownButtonItem 
+        Text="Exportar a PDF" 
+        Click="ExportPdf"
+        IconCssClass="bi bi-file-pdf text-danger"/>
+
+        <DxDropDownButtonItem 
+        Text="Exportar a Excel" 
+        Click="ExportExcel"
+        IconCssClass="bi bi-file-excel text-success"/>
+    </Items>
+</DxDropDownButton>
+
+@code {
+     [Parameter]
+    public IGrid Grid { get; set; }
+    [Parameter]
+    public string FileName { get; set; } = "ExportResult";
+
+    private async Task ExportPdf()
+    {
+        await Grid.ExportToPdfAsync(FileName, new GridPdfExportOptions() {
+            SelectedRowsExportMode = GridSelectedRowsExportMode.KeepGrouping,
+            CustomizePageFooter = args => args.Text = "Page {0} of {1}",
+        });
+    }
+
+    private async Task ExportExcel()
+    {
+        await Grid.ExportToXlsxAsync(FileName, new GridXlExportOptions() {
+            SelectedRowsExportMode = GridSelectedRowsExportMode.KeepGrouping,
+        });
+    }
+}

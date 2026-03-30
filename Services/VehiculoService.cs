@@ -28,7 +28,7 @@ namespace PistaCombustible.Services
                         v.Matricula,
                         v.Activo,
                         v.IdEmpleado,
-                        e.Nombre,
+                        concat(e.Nombre, ' ', e.Apellido) Nombre,
                         v.TipoCombustible,
                         v.FechaCreacion
                     FROM

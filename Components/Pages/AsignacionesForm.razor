@@ -28,7 +28,9 @@
                  TextFieldName="tanque"
                  ValueFieldName="Id"
                  ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                 Placeholder="Seleccione un tanque" />
+                 NullText="Seleccione un tanque"
+                 SearchMode="ListSearchMode.AutoSearch"
+                 SearchFilterCondition="ListSearchFilterCondition.Contains" />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem
@@ -39,12 +41,15 @@
                  TextFieldName="vehiculo"
                  ValueFieldName="Id" 
                  ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                 Placeholder="Seleccione un vehiculo" />
+                 NullText="Seleccione un vehiculo"
+                 SearchMode="ListSearchMode.AutoSearch"
+                 SearchFilterCondition="ListSearchFilterCondition.Contains" />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem Caption="* Litros:">
                 <DxSpinEdit 
-                 @bind-Value="asignacion.Litros" />
+                 @bind-Value="asignacion.Litros"
+                 NullText="Ingrese los litros." />
             </DxFormLayoutItem>
 
         </DxFormLayout>
@@ -77,15 +82,12 @@
     [Parameter]
     public int? Id { get; set; }
     private Asignacion asignacion = new();
-
-    private List<TipoCombustibleItem> tiposCombustible = new();
     private List<Tanque> tanques = new();
     private List<Vehiculo> vehiculos = new();
 
     protected override async Task OnInitializedAsync()
     {
         await CargarAsignaciones();
-        await CargarTiposCombustible();
         await CargarTanques();
         await CargarVehiculos();
     }
@@ -106,19 +108,6 @@
     private async Task CargarVehiculos()
     {
         vehiculos = await Task.Run(() => VehiculoService.GetVehiculos());
-    }
-
-    /// <summary>
-    /// Carga tipos combustible
-    /// </summary>
-    /// <returns></returns>
-    private async Task CargarTiposCombustible()
-    {
-        tiposCombustible = new List<TipoCombustibleItem>
-        {
-            new TipoCombustibleItem { Valor = "Gasolina", Nombre = "Gasolina" },
-            new TipoCombustibleItem { Valor = "Diesel", Nombre = "Diesel" },
-        };
     }
 
     /// <summary>

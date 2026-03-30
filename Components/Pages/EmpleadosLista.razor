@@ -33,7 +33,9 @@
     }
     else
     {
+        <ExportarGrid Grid="Grid" FileName="Listado de empleados"/>
         <DxGrid 
+        @ref="Grid"
         Data="EmpleadoLista" 
         ShowFilterRow="true" 
         AllowSort="true" 
@@ -127,6 +129,7 @@
 </div>
 
 @code {
+    IGrid Grid { get; set; }
     private List<Empleado> EmpleadoLista = new();
 
     protected override async Task OnInitializedAsync()
@@ -143,6 +146,7 @@
         try
         {
             EmpleadoLista = await Task.Run(() => EmpleadoService.GetEmpleados());
+            StateHasChanged();
         }
         catch (Exception ex)
         {

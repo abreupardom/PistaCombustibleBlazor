@@ -22,19 +22,22 @@
             <DxFormLayoutItem 
               Caption="* Marca:">
                 <DxTextBox 
-                @bind-Text="vehiculo.Marca" />
+                @bind-Text="vehiculo.Marca"
+                NullText="Ingrese una marca." />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
                 Caption="* Modelo:">
                 <DxTextBox 
-                @bind-Text="vehiculo.Modelo" />
+                @bind-Text="vehiculo.Modelo"
+                NullText="Ingrese un modelo." />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
              Caption="* Matricula:">
                 <DxTextBox 
-                @bind-Text="vehiculo.Matricula" />
+                @bind-Text="vehiculo.Matricula"
+                NullText="Ingrese una matrícula." />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
@@ -45,7 +48,9 @@
                     TextFieldName="Nombre" 
                     ValueFieldName="Valor"
                     ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                    Placeholder="Seleccione un tipo de combustible" />
+                    NullText="Seleccione un tipo de combustible"
+                    SearchMode="ListSearchMode.AutoSearch"
+                    SearchFilterCondition="ListSearchFilterCondition.Contains"  />
             </DxFormLayoutItem>
 
              <DxFormLayoutItem 
@@ -53,10 +58,12 @@
                     <DxComboBox 
                         @bind-Value="vehiculo.IdEmpleado" 
                         Data="@empleados" 
-                        TextFieldName="Nombre" 
+                        TextFieldName="NombreCompleto" 
                         ValueFieldName="Id"
                         ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                        Placeholder="Seleccione un empleado" />
+                        NullText="Seleccione un empleado" 
+                        SearchMode="ListSearchMode.AutoSearch"
+                        SearchFilterCondition="ListSearchFilterCondition.Contains"/>
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 

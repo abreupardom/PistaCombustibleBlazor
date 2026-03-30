@@ -20,13 +20,15 @@
             <DxFormLayoutItem 
                 Caption="* Capacidad:">
                 <DxSpinEdit 
-                @bind-Value="tanque.Capacidad" />
+                @bind-Value="tanque.Capacidad"
+                NullText="Ingrese una capacidad." />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
                 Caption="* Nivel:">
                  <DxSpinEdit 
-                 @bind-Value="tanque.Nivel" />
+                 @bind-Value="tanque.Nivel"
+                 NullText="Ingrese un nivel." />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
@@ -37,7 +39,9 @@
                     TextFieldName="Nombre" 
                     ValueFieldName="Valor"
                     ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                    Placeholder="Seleccione un tipo de combustible" />
+                    NullText="Seleccione un tipo de combustible"
+                    SearchMode="ListSearchMode.AutoSearch"
+                    SearchFilterCondition="ListSearchFilterCondition.Contains" />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 

@@ -26,6 +26,10 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/abreupardom/Desktop/PistaCombustible/Components/ExportarGrid.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xFeHBvcnRhckdyaWQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/abreupardom/Desktop/PistaCombustible/Components/GlobalToast.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xHbG9iYWxUb2FzdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 

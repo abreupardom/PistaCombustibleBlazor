@@ -8,7 +8,7 @@ namespace PistaCombustible.Models
         public string? Matricula { get; set; }
         public bool Activo { get; set; }
         public string? TipoCombustible { get; set; }
-        public int IdEmpleado { get; set; }
+        public int? IdEmpleado { get; set; }
         public string? Nombre { get; set; }
         public DateTime FechaCreacion { get; set; }
 

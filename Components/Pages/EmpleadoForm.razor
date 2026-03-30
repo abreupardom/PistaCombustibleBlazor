@@ -4,6 +4,7 @@
 @using PistaCombustible.Models
 @using PistaCombustible.Services
 @using DevExpress.Blazor
+@using System.Text.RegularExpressions;
 @inject EmpleadoService EmpleadoService
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
@@ -21,19 +22,22 @@
             <DxFormLayoutItem 
              Caption="* Nombre:">
                 <DxTextBox 
-                @bind-Text="empleado.Nombre" />
+                @bind-Text="empleado.Nombre"
+                NullText="Ingrese un nombre." />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
              Caption="* Apellido:">
                 <DxTextBox 
-                @bind-Text="empleado.Apellido" />
+                @bind-Text="empleado.Apellido"
+                NullText="Ingrese un apellido." />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
               Caption="* Email:">
                 <DxTextBox 
-                @bind-Text="empleado.Email" />
+                @bind-Text="empleado.Email"
+                NullText="Ingrese un correo electrónico válido." />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
@@ -41,7 +45,8 @@
                 <DxDateEdit 
                 @bind-Date="empleado.FechaNacimiento" 
                 DisplayFormat="dd/MM/yyyy"
-                Mask="@DateTimeMask.ShortDate" />
+                Mask="@DateTimeMask.ShortDate"
+                NullText="Seleccione una fecha." />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
@@ -49,7 +54,8 @@
                 <DxSpinEdit 
                 @bind-Value="empleado.Salario" 
                 DisplayFormat="c" 
-                MinValue="0" />
+                MinValue="0"
+                NullText="Ingrese un salario." />
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
@@ -143,7 +149,45 @@
                 
                 return;
             }
+
+            if(empleado.FechaNacimiento > DateTime.Now)
+            {
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",
+                    Text = "La fecha de nacimiento no puede ser futura.",
+                    RenderStyle = ToastRenderStyle.Warning
+                });
+                return;
+            }
+
+            if(DateTime.Now.Year - ((DateTime)empleado.FechaNacimiento).Year < 18)
+            {
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",
+                    Text = "La fecha de nacimiento no es valida. El empleado debe ser mayor de 18 años.",
+                    RenderStyle = ToastRenderStyle.Warning
+                });
+                return;
+            }
+
+            if(!Regex.IsMatch(empleado.Email, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", RegexOptions.IgnoreCase))
+            {
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",
+                    Text = "El correo electrónico no es válido.",
+                    RenderStyle = ToastRenderStyle.Warning
+                });
+                return;
+            }
+
             Empleado? empleadoExistente = EmpleadoService.GetEmpleados().Find(e => e.Email == empleado.Email && e.Id != empleado.Id);
+
             if(empleadoExistente != null)
             {
                 ToastService.ShowToast(new ToastOptions
