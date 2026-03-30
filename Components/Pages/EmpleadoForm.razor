@@ -15,45 +15,68 @@
 
     <div class="card p-4 shadow">
 
-        <DxFormLayout CssClass="w-100 demo-form-layout">
-            <DxFormLayoutItem Caption="Nombre:">
-                <DxTextBox @bind-Text="empleado.Nombre" />
+        <DxFormLayout 
+        CssClass="w-100 demo-form-layout">
+            <DxFormLayoutItem 
+             Caption="Nombre:">
+                <DxTextBox 
+                @bind-Text="empleado.Nombre" />
             </DxFormLayoutItem>
 
-            <DxFormLayoutItem Caption="Apellido:">
-                <DxTextBox @bind-Text="empleado.Apellido" />
+            <DxFormLayoutItem 
+             Caption="Apellido:">
+                <DxTextBox 
+                @bind-Text="empleado.Apellido" />
             </DxFormLayoutItem>
 
-            <DxFormLayoutItem Caption="Email:">
-                <DxTextBox @bind-Text="empleado.Email" />
+            <DxFormLayoutItem 
+              Caption="Email:">
+                <DxTextBox 
+                @bind-Text="empleado.Email" />
             </DxFormLayoutItem>
 
-            <DxFormLayoutItem Caption="Fecha de Nacimiento:">
-                <DxDateEdit @bind-Date="empleado.FechaNacimiento" DisplayFormat="dd/MM/yyyy"
-                            Mask="@DateTimeMask.ShortDate" />
+            <DxFormLayoutItem 
+              Caption="Fecha de Nacimiento:">
+                <DxDateEdit 
+                @bind-Date="empleado.FechaNacimiento" 
+                DisplayFormat="dd/MM/yyyy"
+                Mask="@DateTimeMask.ShortDate" />
             </DxFormLayoutItem>
 
-            <DxFormLayoutItem Caption="Salario:">
-                <DxSpinEdit @bind-Value="empleado.Salario" DisplayFormat="c" MinValue="0" />
+            <DxFormLayoutItem 
+              Caption="Salario:">
+                <DxSpinEdit 
+                @bind-Value="empleado.Salario" 
+                DisplayFormat="c" 
+                MinValue="0" />
             </DxFormLayoutItem>
 
-            <DxFormLayoutItem Caption="Activo:">
-                <DxCheckBox @bind-Checked="empleado.Activo" CheckType="CheckType.Switch"
-                            LabelPosition="LabelPosition.Left" />
+            <DxFormLayoutItem 
+              Caption="Activo:">
+                <DxCheckBox 
+                @bind-Checked="empleado.Activo" 
+                CheckType="CheckType.Switch"
+                LabelPosition="LabelPosition.Left" />
             </DxFormLayoutItem>
         </DxFormLayout>
 
         <div class="w-100 mx-0 mt-3 d-flex gap-2">
-            <DxButton RenderStyle="ButtonRenderStyle.Primary" Click="GuardarEmpleado">
+            <DxButton 
+            RenderStyle="ButtonRenderStyle.Primary" 
+            Click="GuardarEmpleado">
                 <i class="me-2 bi bi-check-circle"></i> Guardar
             </DxButton>
             @if (Id == null)
             {
-                <DxButton RenderStyle="ButtonRenderStyle.Secondary" Click="LimpiarFormulario">
+                <DxButton 
+                RenderStyle="ButtonRenderStyle.Secondary" 
+                Click="LimpiarFormulario">
                     <i class="me-2 bi bi-arrow-counterclockwise"></i> Limpiar
                 </DxButton>
             }
-            <DxButton RenderStyle="ButtonRenderStyle.Danger" Click="Cancelar"><i
+            <DxButton 
+            RenderStyle="ButtonRenderStyle.Danger" 
+            Click="Cancelar"><i
                 class="me-2 bi bi-x-circle"></i>Cancelar
             </DxButton>
         </div>

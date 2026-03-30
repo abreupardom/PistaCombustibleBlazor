@@ -16,20 +16,28 @@
 
     <div class="card p-4 shadow">
 
-        <DxFormLayout CssClass="w-100 demo-form-layout">
-            <DxFormLayoutItem Caption="Marca:">
-                <DxTextBox @bind-Text="vehiculo.Marca" />
+        <DxFormLayout 
+        CssClass="w-100 demo-form-layout">
+            <DxFormLayoutItem 
+              Caption="Marca:">
+                <DxTextBox 
+                @bind-Text="vehiculo.Marca" />
             </DxFormLayoutItem>
 
-            <DxFormLayoutItem Caption="Modelo:">
-                <DxTextBox @bind-Text="vehiculo.Modelo" />
+            <DxFormLayoutItem 
+                Caption="Modelo:">
+                <DxTextBox 
+                @bind-Text="vehiculo.Modelo" />
             </DxFormLayoutItem>
 
-            <DxFormLayoutItem Caption="Matricula:">
-                <DxTextBox @bind-Text="vehiculo.Matricula" />
+            <DxFormLayoutItem 
+             Caption="Matricula:">
+                <DxTextBox 
+                @bind-Text="vehiculo.Matricula" />
             </DxFormLayoutItem>
 
-            <DxFormLayoutItem Caption="Tipo Combustible:">
+            <DxFormLayoutItem 
+              Caption="Tipo Combustible:">
                 <DxComboBox 
                     @bind-Value="vehiculo.TipoCombustible" 
                     Data="@tiposCombustible" 
@@ -39,33 +47,43 @@
                     Placeholder="Seleccione un tipo de combustible" />
             </DxFormLayoutItem>
 
-             <DxFormLayoutItem Caption="Chofer:">
-                <DxComboBox 
-                    @bind-Value="vehiculo.IdEmpleado" 
-                    Data="@empleados" 
-                    TextFieldName="Nombre" 
-                    ValueFieldName="Id"
-                    ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                    Placeholder="Seleccione un empleado" />
+             <DxFormLayoutItem 
+                Caption="Chofer:">
+                    <DxComboBox 
+                        @bind-Value="vehiculo.IdEmpleado" 
+                        Data="@empleados" 
+                        TextFieldName="Nombre" 
+                        ValueFieldName="Id"
+                        ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
+                        Placeholder="Seleccione un empleado" />
             </DxFormLayoutItem>
 
-            <DxFormLayoutItem Caption="Activo:">
-                <DxCheckBox @bind-Checked="vehiculo.Activo" CheckType="CheckType.Switch"
-                            LabelPosition="LabelPosition.Left" />
+            <DxFormLayoutItem 
+            Caption="Activo:">
+                <DxCheckBox 
+                @bind-Checked="vehiculo.Activo" 
+                CheckType="CheckType.Switch"
+                LabelPosition="LabelPosition.Left" />
             </DxFormLayoutItem>
         </DxFormLayout>
 
         <div class="w-100 mx-0 mt-3 d-flex gap-2">
-            <DxButton RenderStyle="ButtonRenderStyle.Primary" Click="GuardarVehiculo">
+            <DxButton 
+            RenderStyle="ButtonRenderStyle.Primary" 
+            Click="GuardarVehiculo">
                 <i class="me-2 bi bi-check-circle"></i> Guardar
             </DxButton>
             @if (Id == null)
             {
-                <DxButton RenderStyle="ButtonRenderStyle.Secondary" Click="LimpiarFormulario">
+                <DxButton 
+                RenderStyle="ButtonRenderStyle.Secondary" 
+                Click="LimpiarFormulario">
                     <i class="me-2 bi bi-arrow-counterclockwise"></i> Limpiar
                 </DxButton>
             }
-            <DxButton RenderStyle="ButtonRenderStyle.Danger" Click="Cancelar">
+            <DxButton 
+            RenderStyle="ButtonRenderStyle.Danger" 
+            Click="Cancelar">
                 <i class="me-2 bi bi-x-circle"></i> Cancelar
             </DxButton>
         </div>

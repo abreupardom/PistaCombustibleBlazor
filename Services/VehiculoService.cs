@@ -52,7 +52,7 @@ namespace PistaCombustible.Services
                     Matricula = row["Matricula"].ToString(),
                     Activo = Convert.ToBoolean(row["Activo"]),
                     TipoCombustible = row["TipoCombustible"].ToString(),
-                    IdEmpleado =  Convert.ToInt32(row["IdEmpleado"]),
+                    IdEmpleado = Convert.ToInt32(row["IdEmpleado"]),
                     Nombre = row["Nombre"].ToString(),
                     FechaCreacion = Convert.ToDateTime(row["FechaCreacion"])
                 });

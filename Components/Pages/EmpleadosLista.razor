@@ -13,8 +13,10 @@
 <div style="width: 80%; margin: auto;">
     <div class="d-flex align-items-center mb-3">
         <h1 class="me-3 mb-0">Lista de empleados</h1>
-        <DxButton RenderStyle="ButtonRenderStyle.Primary" Size="ButtonSize.Small" Click="() => AdicionarEmpleado()"
-                  IconCssClass="bi bi-plus-circle" />
+        <DxButton 
+        RenderStyle="ButtonRenderStyle.Primary" 
+        Size="ButtonSize.Small" Click="() => AdicionarEmpleado()"
+        IconCssClass="bi bi-plus-circle" />
             
     </div>
    
@@ -30,18 +32,36 @@
     }
     else
     {
-        <DxGrid Data="EmpleadoLista" ShowFilterRow="true" AllowSort="true" AllowPaging="true" PageSize="10"
-                ShowPageSizeSelector="true" PageSizes="new int[] { 5, 10, 20, 50 }" AllowGroup="true" CssClass="shadow-sm"
-                ColumnCaptionAlignment="GridTextAlignment.Center" ShowSearchBox="true">
+        <DxGrid 
+        Data="EmpleadoLista" 
+        ShowFilterRow="true" 
+        AllowSort="true" 
+        AllowPaging="true" 
+        PageSize="10"
+        ShowPageSizeSelector="true" 
+        PageSizes="new int[] { 5, 10, 20, 50 }" 
+        AllowGroup="true" CssClass="shadow-sm"
+        ColumnCaptionAlignment="GridTextAlignment.Center" 
+        ShowSearchBox="true">
         
             <Columns>
-                <DxGridDataColumn FieldName="Id" Caption="ID" SortOrder="GridColumnSortOrder.Ascending" />
+                <DxGridDataColumn 
+                FieldName="Id" 
+                Caption="ID" 
+                SortOrder="GridColumnSortOrder.Ascending" />
             
-                <DxGridDataColumn FieldName="NombreCompleto" Caption="Nombre Completo" />
+                <DxGridDataColumn 
+                FieldName="NombreCompleto" 
+                Caption="Nombre Completo" />
             
-                <DxGridDataColumn FieldName="Email" Caption="Correo Electrónico" />
+                <DxGridDataColumn 
+                FieldName="Email" 
+                Caption="Correo Electrónico" />
             
-                <DxGridDataColumn FieldName="FechaNacimiento" Caption="Fecha Nacimiento" DisplayFormat="dd/MM/yyyy">
+                <DxGridDataColumn 
+                FieldName="FechaNacimiento" 
+                Caption="Fecha Nacimiento" 
+                DisplayFormat="dd/MM/yyyy">
                     <CellDisplayTemplate>
                         @{
                             var fecha = (DateTime?)context.Value;
@@ -50,13 +70,18 @@
                     </CellDisplayTemplate>
                 </DxGridDataColumn>
             
-                <DxGridDataColumn FieldName="Salario" Caption="Salario" DisplayFormat="c">
+                <DxGridDataColumn 
+                FieldName="Salario" 
+                Caption="Salario" 
+                DisplayFormat="c">
                     <FooterTemplate>
                         <strong class="colorTotal">Total: $@(EmpleadoLista.Sum(e => e.Salario) ?? 0)</strong>
                     </FooterTemplate>
                 </DxGridDataColumn>
             
-                <DxGridDataColumn FieldName="Activo" Caption="Estado">
+                <DxGridDataColumn 
+                FieldName="Activo" 
+                Caption="Estado">
                     <CellDisplayTemplate>
                         @if ((bool)context.Value)
                         {
@@ -69,16 +94,27 @@
                     </CellDisplayTemplate>
                 </DxGridDataColumn>
 
-                <DxGridDataColumn FieldName="FechaCreacion" Caption="Fecha creación" />
+                <DxGridDataColumn 
+                FieldName="FechaCreacion" 
+                Caption="Fecha creación" />
             
-                <DxGridDataColumn Caption="Acciones" Width="120px">
+                <DxGridDataColumn 
+                Caption="Acciones" 
+                Width="120px">
                     <CellDisplayTemplate>
                         @{
                             var empleado = (Empleado)context.DataItem;
-                            <DxButton RenderStyle="ButtonRenderStyle.Danger" Size="ButtonSize.Small"
-                                      Click="() => EliminarEmpleado(empleado.Id)" IconCssClass="bi bi-trash" />
-                            <DxButton RenderStyle="ButtonRenderStyle.Primary" Size="ButtonSize.Small"
-                                      Click="() => ActualizarEmpleado(empleado.Id)" IconCssClass="bi bi-pen" />
+                            <DxButton 
+                            RenderStyle="ButtonRenderStyle.Danger" 
+                            Size="ButtonSize.Small"
+                            Click="() => EliminarEmpleado(empleado.Id)" 
+                            IconCssClass="bi bi-trash" />
+
+                            <DxButton 
+                            RenderStyle="ButtonRenderStyle.Primary" 
+                            Size="ButtonSize.Small"
+                            Click="() => ActualizarEmpleado(empleado.Id)" 
+                            IconCssClass="bi bi-pen" />
                         }
                     </CellDisplayTemplate>
                 </DxGridDataColumn>

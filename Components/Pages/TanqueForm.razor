@@ -16,15 +16,20 @@
     <div class="card p-4 shadow">
 
         <DxFormLayout CssClass="w-100 demo-form-layout">
-            <DxFormLayoutItem Caption="Capacidad:">
-                <DxSpinEdit @bind-Value="tanque.Capacidad" />
+            <DxFormLayoutItem 
+                Caption="Capacidad:">
+                <DxSpinEdit 
+                @bind-Value="tanque.Capacidad" />
             </DxFormLayoutItem>
 
-            <DxFormLayoutItem Caption="Nivel:">
-                 <DxSpinEdit @bind-Value="tanque.Nivel" />
+            <DxFormLayoutItem 
+                Caption="Nivel:">
+                 <DxSpinEdit 
+                 @bind-Value="tanque.Nivel" />
             </DxFormLayoutItem>
 
-            <DxFormLayoutItem Caption="Tipo Combustible:">
+            <DxFormLayoutItem 
+                Caption="Tipo Combustible:">
                 <DxComboBox 
                     @bind-Value="tanque.TipoCombustible" 
                     Data="@tiposCombustible" 
@@ -34,23 +39,32 @@
                     Placeholder="Seleccione un tipo de combustible" />
             </DxFormLayoutItem>
 
-            <DxFormLayoutItem Caption="Activo:">
-                <DxCheckBox @bind-Checked="tanque.Activo" CheckType="CheckType.Switch"
-                            LabelPosition="LabelPosition.Left" />
+            <DxFormLayoutItem 
+                Caption="Activo:">
+                <DxCheckBox 
+                @bind-Checked="tanque.Activo" 
+                CheckType="CheckType.Switch"
+                LabelPosition="LabelPosition.Left" />
             </DxFormLayoutItem>
         </DxFormLayout>
 
         <div class="w-100 mx-0 mt-3 d-flex gap-2">
-            <DxButton RenderStyle="ButtonRenderStyle.Primary" Click="GuardarTanque">
+            <DxButton 
+            RenderStyle="ButtonRenderStyle.Primary" 
+            Click="GuardarTanque">
                 <i class="me-2 bi bi-check-circle"></i> Guardar
             </DxButton>
             @if (Id == null)
             {
-                <DxButton RenderStyle="ButtonRenderStyle.Secondary" Click="LimpiarFormulario">
+                <DxButton 
+                RenderStyle="ButtonRenderStyle.Secondary" 
+                Click="LimpiarFormulario">
                     <i class="me-2 bi bi-arrow-counterclockwise"></i> Limpiar
                 </DxButton>
             }
-            <DxButton RenderStyle="ButtonRenderStyle.Danger" Click="Cancelar">
+            <DxButton 
+            RenderStyle="ButtonRenderStyle.Danger" 
+            Click="Cancelar">
                 <i class="me-2 bi bi-x-circle"></i> Cancelar
             </DxButton>
         </div>

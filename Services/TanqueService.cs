@@ -105,7 +105,7 @@ namespace PistaCombustible.Services
                 new SqlParameter("@Nivel", tanque.Nivel),
                 new SqlParameter("@TipoCombustible", tanque.TipoCombustible),
                 new SqlParameter("@Activo", tanque.Activo),
-                
+
             };
 
             var resultado = _conexion.EjecutarEscalar(query, parametros);

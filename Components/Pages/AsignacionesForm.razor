@@ -9,6 +9,7 @@
 @inject VehiculoService VehiculoService
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
+@inject IToastNotificationService ToastService
 
 <PageTitle>Gestión de asignacion</PageTitle>
 
@@ -19,58 +20,74 @@
 
         <DxFormLayout CssClass="w-100 demo-form-layout">
            
-            <DxFormLayoutItem Caption="Tanque:">
-                <DxComboBox 
-                    @bind-Value="asignacion.Tanque" 
-                    Data="@tanques" 
-                    TextFieldName="tanque" 
-                    ValueFieldName="Id"
-                    ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                    Placeholder="Seleccione un tanque" />
+            <DxFormLayoutItem
+             Caption="Tanque:">
+                <DxComboBox
+                 @bind-Value="asignacion.Tanque"
+                 Data="@tanques"
+                 TextFieldName="tanque"
+                 ValueFieldName="Id"
+                 ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
+                 Placeholder="Seleccione un tanque" />
             </DxFormLayoutItem>
 
-             <DxFormLayoutItem Caption="Vehiculo:">
-                <DxComboBox 
-                    @bind-Value="asignacion.Vehiculo" 
-                    Data="@vehiculos" 
-                    TextFieldName="vehiculo" 
-                    ValueFieldName="Id"
-                    ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                    Placeholder="Seleccione un vehiculo" />
+            <DxFormLayoutItem
+             Caption="Vehiculo:">
+                <DxComboBox
+                 @bind-Value="asignacion.Vehiculo" 
+                 Data="@vehiculos" 
+                 TextFieldName="vehiculo"
+                 ValueFieldName="Id" 
+                 ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
+                 Placeholder="Seleccione un vehiculo" />
             </DxFormLayoutItem>
 
-             <DxFormLayoutItem Caption="Litros:">
-                 <DxSpinEdit @bind-Value="asignacion.Litros" />
+            <DxFormLayoutItem Caption="Litros:">
+                <DxSpinEdit 
+                 @bind-Value="asignacion.Litros" />
             </DxFormLayoutItem>
 
         </DxFormLayout>
 
         <div class="w-100 mx-0 mt-3 d-flex gap-2">
-            <DxButton RenderStyle="ButtonRenderStyle.Primary" Click="GuardarAsignacion">
+            <DxButton 
+             RenderStyle="ButtonRenderStyle.Primary" 
+             Click="GuardarAsignacion">
                 <i class="me-2 bi bi-check-circle"></i> Guardar
             </DxButton>
             @if (Id == null)
             {
-                <DxButton RenderStyle="ButtonRenderStyle.Secondary" Click="LimpiarFormulario">
+                <DxButton 
+                 RenderStyle="ButtonRenderStyle.Secondary" 
+                 Click="LimpiarFormulario">
                     <i class="me-2 bi bi-arrow-counterclockwise"></i> Limpiar
                 </DxButton>
             }
-            <DxButton RenderStyle="ButtonRenderStyle.Danger" Click="Cancelar">
+            <DxButton 
+             RenderStyle="ButtonRenderStyle.Danger" 
+             Click="Cancelar">
                 <i class="me-2 bi bi-x-circle"></i> Cancelar
             </DxButton>
         </div>
     </div>
+    <DxToastProvider
+     Name="Notificacion"
+     MaxToastCount="3"
+     DisplayTime="@TimeSpan.FromSeconds(5)"
+     FreezeOnClick="true"
+     HorizontalAlignment="HorizontalAlignment.Center"
+     VerticalAlignment="VerticalEdge.Top"
+     ShowCloseButton="true" />
 </div>
 
 @code {
-
     [Parameter]
     public int? Id { get; set; }
     private Asignacion asignacion = new();
 
     private List<TipoCombustibleItem> tiposCombustible = new();
     private List<Tanque> tanques = new();
-     private List<Vehiculo> vehiculos = new();
+    private List<Vehiculo> vehiculos = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -89,13 +106,13 @@
         tanques = await Task.Run(() => TanqueService.GetTanques());
     }
 
-     /// <summary>
+    /// <summary>
     /// Carga vehiculo
     /// </summary>
     /// <returns></returns>
     private async Task CargarVehiculos()
     {
-        vehiculos = await Task.Run(() =>VehiculoService.GetVehiculos());
+        vehiculos = await Task.Run(() => VehiculoService.GetVehiculos());
     }
 
     /// <summary>
@@ -144,35 +161,66 @@
         try
         {
             if (asignacion.Tanque == null ||
-               asignacion.Vehiculo == null || 
-               asignacion.Litros == null)
+                asignacion.Vehiculo == null ||
+                asignacion.Litros == null)
             {
-                await JS.InvokeVoidAsync("alert", "Por favor, complete todos los campos requeridos");
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Error",
+                    Text = "Por favor, complete todos los campos requeridos.",
+                    RenderStyle = ToastRenderStyle.Danger
+                });
                 return;
             }
 
-            if(asignacion.Litros > tanques.Find(n=>n.Id == asignacion.Tanque).Nivel)
+            if (asignacion.Litros > tanques.Find(n => n.Id == asignacion.Tanque).Nivel)
             {
-                await JS.InvokeVoidAsync("alert", "Por favor, los litros asignados no puede ser mayor que el nivel del tanque.");
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Alerta",
+                    Text = "Por favor, los litros asignados no puede ser mayor que el nivel del tanque.",
+                    RenderStyle = ToastRenderStyle.Warning
+                });
                 return;
             }
 
-            if(tanques.Find(n=>n.Id == asignacion.Tanque).TipoCombustible != vehiculos.Find(n=>n.Id == asignacion.Vehiculo).TipoCombustible)
+            if (tanques.Find(n => n.Id == asignacion.Tanque).TipoCombustible !=
+                vehiculos.Find(n => n.Id == asignacion.Vehiculo).TipoCombustible)
             {
-                await JS.InvokeVoidAsync("alert", "Por favor, el tipo de combustible del vehiculo y del tanque debe ser el mismo.");
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Alerta",
+                    Text = "Por favor, el tipo de combustible del vehículo y del tanque debe ser el mismo.",
+                    RenderStyle = ToastRenderStyle.Warning
+                });
                 return;
             }
 
             if (Id != null)
             {
                 await Task.Run(() => AsignacionService.UpdateAsignacion(asignacion));
-                await JS.InvokeVoidAsync("alert", "Asignacion actualizado correctamente");
-                Navigation.NavigateTo("/asignaciones");
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",
+                    Text = "Asignacion actualizada correctamente.",
+                    RenderStyle = ToastRenderStyle.Success
+                });
+                Navigation.NavigateTo($"/asignaciones");
             }
             else
             {
                 await Task.Run(() => AsignacionService.AddAsignacion(asignacion));
-                await JS.InvokeVoidAsync("alert", "Asignaciones guardado correctamente");
+                ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",
+                    Text = "Asignación creada correctamente.",
+                    RenderStyle = ToastRenderStyle.Success
+                });
                 LimpiarFormulario();
             }
         }

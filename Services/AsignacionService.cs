@@ -163,7 +163,7 @@ namespace PistaCombustible.Services
             };
 
             int filasAfectadas = _conexion.EjecutarComando(query, parametros);
-            
+
             if (filasAfectadas > 0)
             {
                 query = @"

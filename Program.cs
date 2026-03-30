@@ -12,7 +12,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddDevExpressBlazor();
 
 // Registrar la clase de conexión como servicio
-builder.Services.AddScoped<ConexionSQL>(provider => 
+builder.Services.AddScoped<ConexionSQL>(provider =>
     new ConexionSQL(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Registrar la clase de servicio

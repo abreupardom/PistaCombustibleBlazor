@@ -13,8 +13,11 @@
 <div style="width: 80%; margin: auto;">
     <div class="d-flex align-items-center mb-3">
         <h1 class="me-3 mb-0">Lista de asignaciones</h1>
-        <DxButton RenderStyle="ButtonRenderStyle.Primary" Size="ButtonSize.Small" Click="() => AdicionarAsignacion()"
-                  IconCssClass="bi bi-plus-circle" />
+        <DxButton 
+        RenderStyle="ButtonRenderStyle.Primary" 
+        Size="ButtonSize.Small" 
+        Click="() => AdicionarAsignacion()"
+        IconCssClass="bi bi-plus-circle" />
             
     </div>
    
@@ -30,29 +33,56 @@
     }
     else
     {
-        <DxGrid Data="AsignacionLista" ShowFilterRow="true" AllowSort="true" AllowPaging="true" PageSize="10"
-                ShowPageSizeSelector="true" PageSizes="new int[] { 5, 10, 20, 50 }" AllowGroup="true" CssClass="shadow-sm"
-                ColumnCaptionAlignment="GridTextAlignment.Center" ShowSearchBox="true">
+        <DxGrid 
+        Data="AsignacionLista" 
+        ShowFilterRow="true" 
+        AllowSort="true" 
+        AllowPaging="true" PageSize="10"
+        ShowPageSizeSelector="true" 
+        PageSizes="new int[] { 5, 10, 20, 50 }" 
+        AllowGroup="true" CssClass="shadow-sm"
+        ColumnCaptionAlignment="GridTextAlignment.Center" 
+        ShowSearchBox="true">
         
             <Columns>
-                <DxGridDataColumn FieldName="Id" Caption="ID" SortOrder="GridColumnSortOrder.Ascending" />
+                <DxGridDataColumn 
+                FieldName="Id" 
+                Caption="ID" 
+                SortOrder="GridColumnSortOrder.Ascending" />
             
-                <DxGridDataColumn FieldName="tanqueCompleto" Caption="Tanque" />
+                <DxGridDataColumn 
+                FieldName="tanqueCompleto" 
+                Caption="Tanque" />
             
-                <DxGridDataColumn FieldName="vehiculoCompleto" Caption="Vehículo" />
+                <DxGridDataColumn 
+                FieldName="vehiculoCompleto" 
+                Caption="Vehículo" />
 
-                <DxGridDataColumn FieldName="Litros" Caption="Litros" />
+                <DxGridDataColumn 
+                FieldName="Litros" 
+                Caption="Litros" />
 
-                <DxGridDataColumn FieldName="FechaCreacion" Caption="Fecha creación" />
+                <DxGridDataColumn 
+                FieldName="FechaCreacion" 
+                Caption="Fecha creación" />
 
-                <DxGridDataColumn Caption="Acciones" Width="120px">
+                <DxGridDataColumn 
+                Caption="Acciones" 
+                Width="120px">
                     <CellDisplayTemplate>
                         @{
                             var Asignacion = (Asignacion)context.DataItem;
-                            <DxButton RenderStyle="ButtonRenderStyle.Danger" Size="ButtonSize.Small"
-                                      Click="() => EliminarAsignacion(Asignacion.Id)" IconCssClass="bi bi-trash" />
-                            <DxButton RenderStyle="ButtonRenderStyle.Primary" Size="ButtonSize.Small"
-                                      Click="() => ActualizarAsignacion(Asignacion.Id)" IconCssClass="bi bi-pen" />
+                            <DxButton 
+                            RenderStyle="ButtonRenderStyle.Danger" 
+                            Size="ButtonSize.Small"
+                            Click="() => EliminarAsignacion(Asignacion.Id)" 
+                            IconCssClass="bi bi-trash" />
+
+                            <DxButton 
+                            RenderStyle="ButtonRenderStyle.Primary" 
+                            Size="ButtonSize.Small"
+                            Click="() => ActualizarAsignacion(Asignacion.Id)" 
+                            IconCssClass="bi bi-pen" />
                         }
                     </CellDisplayTemplate>
                 </DxGridDataColumn>

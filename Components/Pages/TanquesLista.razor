@@ -13,8 +13,11 @@
 <div style="width: 80%; margin: auto;">
     <div class="d-flex align-items-center mb-3">
         <h1 class="me-3 mb-0">Lista de tanques</h1>
-        <DxButton RenderStyle="ButtonRenderStyle.Primary" Size="ButtonSize.Small" Click="() => AdicionarTanque()"
-                  IconCssClass="bi bi-plus-circle" />
+        <DxButton 
+        RenderStyle="ButtonRenderStyle.Primary" 
+        Size="ButtonSize.Small" 
+        Click="() => AdicionarTanque()"
+        IconCssClass="bi bi-plus-circle" />
             
     </div>
    
@@ -30,20 +33,39 @@
     }
     else
     {
-        <DxGrid Data="TanqueLista" ShowFilterRow="true" AllowSort="true" AllowPaging="true" PageSize="10"
-                ShowPageSizeSelector="true" PageSizes="new int[] { 5, 10, 20, 50 }" AllowGroup="true" CssClass="shadow-sm"
-                ColumnCaptionAlignment="GridTextAlignment.Center" ShowSearchBox="true">
+        <DxGrid 
+        Data="TanqueLista" 
+        ShowFilterRow="true" 
+        AllowSort="true" 
+        AllowPaging="true" 
+        PageSize="10"
+        ShowPageSizeSelector="true" 
+        PageSizes="new int[] { 5, 10, 20, 50 }" 
+        AllowGroup="true" CssClass="shadow-sm"
+        ColumnCaptionAlignment="GridTextAlignment.Center" 
+        ShowSearchBox="true">
         
             <Columns>
-                <DxGridDataColumn FieldName="Id" Caption="ID" SortOrder="GridColumnSortOrder.Ascending" />
+                <DxGridDataColumn 
+                FieldName="Id" 
+                Caption="ID" 
+                SortOrder="GridColumnSortOrder.Ascending" />
             
-                <DxGridDataColumn FieldName="Capacidad" Caption="Capacidad" />
+                <DxGridDataColumn 
+                FieldName="Capacidad" 
+                Caption="Capacidad" />
             
-                <DxGridDataColumn FieldName="Nivel" Caption="Nivel" />
+                <DxGridDataColumn 
+                FieldName="Nivel" 
+                Caption="Nivel" />
 
-                <DxGridDataColumn FieldName="TipoCombustible" Caption="Tipo combustible" />
+                <DxGridDataColumn 
+                FieldName="TipoCombustible" 
+                Caption="Tipo combustible" />
 
-                <DxGridDataColumn FieldName="Activo" Caption="Estado">
+                <DxGridDataColumn 
+                FieldName="Activo" 
+                Caption="Estado">
                     <CellDisplayTemplate>
                         @if ((bool)context.Value)
                         {
@@ -56,16 +78,27 @@
                     </CellDisplayTemplate>
                 </DxGridDataColumn>
 
-                <DxGridDataColumn FieldName="FechaCreacion" Caption="Fecha creación" />
+                <DxGridDataColumn 
+                FieldName="FechaCreacion" 
+                Caption="Fecha creación" />
 
-                <DxGridDataColumn Caption="Acciones" Width="120px">
+                <DxGridDataColumn 
+                Caption="Acciones" 
+                Width="120px">
                     <CellDisplayTemplate>
                         @{
                             var Tanques = (Tanque)context.DataItem;
-                            <DxButton RenderStyle="ButtonRenderStyle.Danger" Size="ButtonSize.Small"
-                                      Click="() => EliminarTanque(Tanques.Id)" IconCssClass="bi bi-trash" />
-                            <DxButton RenderStyle="ButtonRenderStyle.Primary" Size="ButtonSize.Small"
-                                      Click="() => ActualizarTanque(Tanques.Id)" IconCssClass="bi bi-pen" />
+                            <DxButton 
+                            RenderStyle="ButtonRenderStyle.Danger" 
+                            Size="ButtonSize.Small"
+                            Click="() => EliminarTanque(Tanques.Id)" 
+                            IconCssClass="bi bi-trash" />
+
+                            <DxButton 
+                            RenderStyle="ButtonRenderStyle.Primary" 
+                            Size="ButtonSize.Small"
+                            Click="() => ActualizarTanque(Tanques.Id)" 
+                            IconCssClass="bi bi-pen" />
                         }
                     </CellDisplayTemplate>
                 </DxGridDataColumn>

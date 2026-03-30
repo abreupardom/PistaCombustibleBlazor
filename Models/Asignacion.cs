@@ -7,7 +7,7 @@ namespace PistaCombustible.Models
         public int Vehiculo { get; set; }
         public Decimal? Litros { get; set; }
         public DateTime FechaCreacion { get; set; }
-        public string tanqueCompleto { get; set;}
-        public string vehiculoCompleto { get; set;}
+        public string tanqueCompleto { get; set; }
+        public string vehiculoCompleto { get; set; }
     }
 }
