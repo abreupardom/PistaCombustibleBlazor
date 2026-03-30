@@ -32,7 +32,7 @@ namespace PistaCombustible.Services
                     FechaCreacion
                 FROM Empleados 
                 WHERE
-                    Activo > 0
+                    Activo >= 0
                 ORDER BY Id DESC";
 
             var dataTable = _conexion.EjecutarConsulta(query);
