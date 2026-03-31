@@ -15,10 +15,13 @@ namespace PistaCombustible.Services
         }
 
         /// <summary>
-        /// Obtener todos los Vehiculos
+        /// Obtener todos los Vehiculos. <br/>
+        /// Tenga en cuenta que este método hace un INNER JOIN con la tabla Empleados para obtener el nombre completo del empleado asociado a cada vehículo.<br/>
+        /// Si necesitas un filtro específico, puedes pasarlo como parámetro de entrada donde el alias de la tabla Empleados es "e" y el alias de la tabla Vehiculos es "v".
         /// </summary>
+        /// <param name="filtro">Filtro opcional para búsqueda (ej: "WHERE v.Activo = 1")</param>
         /// <returns></returns>
-        public List<Vehiculo> GetVehiculos()
+        public List<Vehiculo> GetVehiculos(string filtro = "")
         {
             string query = @"
                     SELECT
@@ -33,11 +36,9 @@ namespace PistaCombustible.Services
                         v.FechaCreacion
                     FROM
                         Vehiculos AS v
-                    INNER JOIN Empleados AS e ON v.IdEmpleado = e.Id
-                    WHERE
-                        v.Activo >= 0
-                        ORDER BY
-                        v.Id DESC";
+                    INNER JOIN Empleados AS e ON v.IdEmpleado = e.Id " +
+                    filtro +
+                    @" ORDER BY v.Id DESC";
 
             var dataTable = _conexion.EjecutarConsulta(query);
             var Vehiculos = new List<Vehiculo>();

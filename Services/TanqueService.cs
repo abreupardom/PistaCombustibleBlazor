@@ -15,10 +15,12 @@ namespace PistaCombustible.Services
         }
 
         /// <summary>
-        /// Obtener todos los Tanques
+        /// Obtener todos los Tanques.<br/>
+        /// Tenga en cuenta que este método puede pasar un filtro opcional para búsqueda (ej: "WHERE Activo = 1").
         /// </summary>
+        /// <param name="filtro">Filtro opcional para búsqueda (ej: "WHERE Activo = 1")</param>
         /// <returns></returns>
-        public List<Tanque> GetTanques()
+        public List<Tanque> GetTanques(string filtro = "")
         {
             string query = @"
                     SELECT
@@ -29,11 +31,10 @@ namespace PistaCombustible.Services
                         Activo,
                         FechaCreacion
                     FROM
-                        Tanques
-                    WHERE
-                        Activo >= 0
-                        ORDER BY
-                        Id DESC";
+                        Tanques " +
+                    filtro +
+                    @" ORDER BY Id DESC";
+
 
             var dataTable = _conexion.EjecutarConsulta(query);
             var Tanques = new List<Tanque>();

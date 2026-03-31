@@ -34,14 +34,14 @@
             </DxFormLayoutItem>
 
             <DxFormLayoutItem
-             Caption="* Vehiculo:">
+             Caption="* Vehículo:">
                 <DxComboBox
                  @bind-Value="asignacion.Vehiculo" 
                  Data="@vehiculos" 
                  TextFieldName="vehiculo"
                  ValueFieldName="Id" 
                  ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                 NullText="Seleccione un vehiculo"
+                 NullText="Seleccione un vehículo"
                  SearchMode="ListSearchMode.AutoSearch"
                  SearchFilterCondition="ListSearchFilterCondition.Contains" />
             </DxFormLayoutItem>
@@ -98,7 +98,7 @@
     /// <returns></returns>
     private async Task CargarTanques()
     {
-        tanques = await Task.Run(() => TanqueService.GetTanques());
+        tanques = await Task.Run(() => TanqueService.GetTanques("WHERE Activo = 1"));
     }
 
     /// <summary>
@@ -107,7 +107,7 @@
     /// <returns></returns>
     private async Task CargarVehiculos()
     {
-        vehiculos = await Task.Run(() => VehiculoService.GetVehiculos());
+        vehiculos = await Task.Run(() => VehiculoService.GetVehiculos("WHERE v.Activo = 1"));
     }
 
     /// <summary>

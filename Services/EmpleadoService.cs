@@ -17,8 +17,9 @@ namespace PistaCombustible.Services
         /// <summary>
         /// Obtener todos los empleados
         /// </summary>
+        /// <param name="filtro">Filtro opcional para búsqueda (ej: "WHERE Activo = 1")</param>
         /// <returns></returns>
-        public List<Empleado> GetEmpleados()
+        public List<Empleado> GetEmpleados(string filtro = "")
         {
             string query = @"
                 SELECT 
@@ -30,10 +31,10 @@ namespace PistaCombustible.Services
                     Salario,
                     Activo,
                     FechaCreacion
-                FROM Empleados 
-                WHERE
-                    Activo >= 0
-                ORDER BY Id DESC";
+                FROM 
+                    Empleados "+
+                filtro +
+                @" ORDER BY Id DESC";
 
             var dataTable = _conexion.EjecutarConsulta(query);
             var empleados = new List<Empleado>();

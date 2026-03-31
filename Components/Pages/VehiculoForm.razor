@@ -34,7 +34,7 @@
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
-             Caption="* Matricula:">
+             Caption="* Matrícula:">
                 <DxTextBox 
                 @bind-Text="vehiculo.Matricula"
                 NullText="Ingrese una matrícula." />
@@ -134,7 +134,7 @@
     /// <returns></returns>
     private async Task CargarEmpleados()
     {
-        empleados = await Task.Run(() => EmpleadoService.GetEmpleados());
+        empleados = await Task.Run(() => EmpleadoService.GetEmpleados("WHERE Activo = 1"));
     }
 
     /// <summary>
@@ -174,7 +174,7 @@
                 string.IsNullOrWhiteSpace(vehiculo.Modelo) ||
                 string.IsNullOrWhiteSpace(vehiculo.Matricula) ||
                 string.IsNullOrWhiteSpace(vehiculo.TipoCombustible)||
-                vehiculo.IdEmpleado == 0)
+                vehiculo.IdEmpleado == 0 || vehiculo.IdEmpleado == null)
             {
                 ToastService.ShowToast(new ToastOptions
                 {
