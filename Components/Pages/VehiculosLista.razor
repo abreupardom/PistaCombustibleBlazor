@@ -12,15 +12,17 @@
 
 
 <div style="width: 80%; margin: auto;">
-    <div class="d-flex align-items-center mb-3">
-        <h1 class="me-3 mb-0">Lista de vehículos</h1>
-        <DxButton 
-        RenderStyle="ButtonRenderStyle.Primary" 
-        Size="ButtonSize.Small" 
-        Click="() => AdicionarVehiculo()"
-        IconCssClass="bi bi-plus-circle" />
-            
-    </div>
+    @if (verTitulo)
+    {
+        <div class="d-flex align-items-center mb-3">
+            <h1 class="me-3 mb-0">Lista de vehículos</h1>
+            <DxButton 
+            RenderStyle="ButtonRenderStyle.Primary" 
+            Size="ButtonSize.Small" 
+            Click="() => AdicionarVehiculo()"
+            IconCssClass="bi bi-plus-circle" />
+        </div>
+    }
    
     @if (VehiculoLista == null)
     {
@@ -34,7 +36,10 @@
     }
     else
     {
-        <ExportarGrid Grid="Grid" FileName="Listado de vehículos"/>
+        @if (verExportar)
+        {
+            <ExportarGrid Grid="Grid" FileName="Listado de vehículos"/>
+        }
         <DxGrid 
         @ref="Grid"
         Data="VehiculoLista" 
@@ -124,35 +129,49 @@
                     </HeaderCaptionTemplate>
                 </DxGridDataColumn>
 
-                <DxGridDataColumn 
-                Caption="Acciones" 
-                Width="120px"
-                TextAlignment="GridTextAlignment.Center">
-                    <CellDisplayTemplate>
-                        @{
-                            var Vehiculos = (Vehiculo)context.DataItem;
-                            <DxButton 
-                            RenderStyle="ButtonRenderStyle.Danger" 
-                            Size="ButtonSize.Small"
-                            Click="() => EliminarVehiculo(Vehiculos.Id)" 
-                            IconCssClass="bi bi-trash" />
+                @if (verAcciones)
+                {
+                    <DxGridDataColumn 
+                    Caption="Acciones" 
+                    Width="120px"
+                    TextAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate>
+                            @{
+                                var Vehiculos = (Vehiculo)context.DataItem;
+                                <DxButton 
+                                RenderStyle="ButtonRenderStyle.Danger" 
+                                Size="ButtonSize.Small"
+                                Click="() => EliminarVehiculo(Vehiculos.Id)" 
+                                IconCssClass="bi bi-trash" />
 
-                            <DxButton 
-                            RenderStyle="ButtonRenderStyle.Primary" 
-                            Size="ButtonSize.Small"
-                            Click="() => ActualizarVehiculo(Vehiculos.Id)" 
-                            IconCssClass="bi bi-pen" />
-                        }
-                    </CellDisplayTemplate>
-                </DxGridDataColumn>
+                                <DxButton 
+                                RenderStyle="ButtonRenderStyle.Primary" 
+                                Size="ButtonSize.Small"
+                                Click="() => ActualizarVehiculo(Vehiculos.Id)" 
+                                IconCssClass="bi bi-pen" />
+                            }
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                }
             </Columns>
         </DxGrid>
-        <span class="totalVehiculos d-block mt-3">@VehiculoLista.Count() vehículos en total</span>
+        @if(verTotal)
+        {
+            <span class="totalVehiculos d-block mt-3">@VehiculoLista.Count() vehículos en total</span>
+        }
     }
     <GlobalToast/>
 </div>
 
 @code {
+    [Parameter]
+    public bool verTitulo { get; set; }
+    [Parameter]
+    public bool verExportar { get; set; }
+    [Parameter]
+    public bool verAcciones { get; set; }
+    [Parameter]
+    public bool verTotal { get; set; }
     IGrid Grid { get; set; }
     private List<Vehiculo> VehiculoLista = new();
 

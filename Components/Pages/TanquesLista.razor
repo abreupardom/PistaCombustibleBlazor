@@ -12,15 +12,17 @@
 
 
 <div style="width: 80%; margin: auto;">
-    <div class="d-flex align-items-center mb-3">
-        <h1 class="me-3 mb-0">Lista de tanques</h1>
-        <DxButton 
-        RenderStyle="ButtonRenderStyle.Primary" 
-        Size="ButtonSize.Small" 
-        Click="() => AdicionarTanque()"
-        IconCssClass="bi bi-plus-circle" />
-            
-    </div>
+    @if (verTitulo)
+    {
+        <div class="d-flex align-items-center mb-3">
+            <h1 class="me-3 mb-0">Lista de tanques</h1>
+            <DxButton 
+            RenderStyle="ButtonRenderStyle.Primary" 
+            Size="ButtonSize.Small" 
+            Click="() => AdicionarTanque()"
+            IconCssClass="bi bi-plus-circle" />
+        </div>
+    }
    
     @if (TanqueLista == null)
     {
@@ -34,7 +36,10 @@
     }
     else
     {
-        <ExportarGrid Grid="Grid" FileName="Listado de tanques"/>
+        @if (verExportar)
+        {
+            <ExportarGrid Grid="Grid" FileName="Listado de tanques"/>
+        }
         <DxGrid 
         @ref="Grid"
         Data="TanqueLista" 
@@ -121,35 +126,49 @@
                         </HeaderCaptionTemplate>
                 </DxGridDataColumn>
 
-                <DxGridDataColumn 
-                Caption="Acciones" 
-                Width="120px"
-                TextAlignment="GridTextAlignment.Center">
-                    <CellDisplayTemplate>
-                        @{
-                            var Tanques = (Tanque)context.DataItem;
-                            <DxButton 
-                            RenderStyle="ButtonRenderStyle.Danger" 
-                            Size="ButtonSize.Small"
-                            Click="() => EliminarTanque(Tanques.Id)" 
-                            IconCssClass="bi bi-trash" />
+                @if (verAcciones)
+                {
+                    <DxGridDataColumn 
+                    Caption="Acciones" 
+                    Width="120px"
+                    TextAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate>
+                            @{
+                                var Tanques = (Tanque)context.DataItem;
+                                <DxButton 
+                                RenderStyle="ButtonRenderStyle.Danger" 
+                                Size="ButtonSize.Small"
+                                Click="() => EliminarTanque(Tanques.Id)" 
+                                IconCssClass="bi bi-trash" />
 
-                            <DxButton 
-                            RenderStyle="ButtonRenderStyle.Primary" 
-                            Size="ButtonSize.Small"
-                            Click="() => ActualizarTanque(Tanques.Id)" 
-                            IconCssClass="bi bi-pen" />
-                        }
-                    </CellDisplayTemplate>
-                </DxGridDataColumn>
+                                <DxButton 
+                                RenderStyle="ButtonRenderStyle.Primary" 
+                                Size="ButtonSize.Small"
+                                Click="() => ActualizarTanque(Tanques.Id)" 
+                                IconCssClass="bi bi-pen" />
+                            }
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                }
             </Columns>
         </DxGrid>
-        <span class="totalTanques d-block mt-3">@TanqueLista.Count() tanques en total</span>
+        @if(verTotal)
+        {
+            <span class="totalTanques d-block mt-3">@TanqueLista.Count() tanques en total</span>
+        }
     }
     <GlobalToast/>
 </div>
 
 @code {
+    [Parameter]
+    public bool verTitulo { get; set; }
+    [Parameter]
+    public bool verExportar { get; set; }
+    [Parameter]
+    public bool verAcciones { get; set; }
+    [Parameter]
+    public bool verTotal { get; set; }
     IGrid Grid { get; set; }
     private List<Tanque> TanqueLista = new();
 
