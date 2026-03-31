@@ -165,13 +165,13 @@
 
 @code {
     [Parameter]
-    public bool verTitulo { get; set; }
+    public bool verTitulo { get; set; } = true;
     [Parameter]
-    public bool verExportar { get; set; }
+    public bool verExportar { get; set; } = true;
     [Parameter]
-    public bool verAcciones { get; set; }
+    public bool verAcciones { get; set; } = true;
     [Parameter]
-    public bool verTotal { get; set; }
+    public bool verTotal { get; set; } = true;
     IGrid Grid { get; set; }
     private List<Vehiculo> VehiculoLista = new();
 
