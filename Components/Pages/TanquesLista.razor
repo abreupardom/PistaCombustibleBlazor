@@ -46,29 +46,60 @@
         PageSizes="new int[] { 5, 10, 20, 50 }" 
         AllowGroup="true" CssClass="shadow-sm"
         ColumnCaptionAlignment="GridTextAlignment.Center" 
-        ShowSearchBox="true">
+        ShowSearchBox="true"
+        HighlightRowOnHover="true">
         
             <Columns>
                 <DxGridDataColumn 
                 FieldName="Id" 
                 Caption="Número de tanque" 
-                SortOrder="GridColumnSortOrder.Ascending" />
+                TextAlignment="GridTextAlignment.Center"
+                SortOrder="GridColumnSortOrder.Ascending" >
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-hash"></i> Número de tanque
+                    </HeaderCaptionTemplate>
+                </DxGridDataColumn>
             
                 <DxGridDataColumn 
                 FieldName="Capacidad" 
-                Caption="Capacidad" />
-            
+                Caption="Capacidad"
+                TextAlignment="GridTextAlignment.Center">
+                   <HeaderCaptionTemplate>
+                        <i class="bi bi-beaker"></i> Capacidad
+                    </HeaderCaptionTemplate>
+                    <CellDisplayTemplate>
+                        <span class="badge bg-success">@($"{context.Value} L")</span>
+                    </CellDisplayTemplate>
+                </DxGridDataColumn>
+             
                 <DxGridDataColumn 
                 FieldName="Nivel" 
-                Caption="Nivel" />
+                Caption="Nivel"
+                TextAlignment="GridTextAlignment.Center">
+                 <HeaderCaptionTemplate>
+                        <i class="bi bi-measuring-cup"></i> Nivel
+                    </HeaderCaptionTemplate>
+                    <CellDisplayTemplate>
+                        <span class="badge bg-success">@($"{context.Value} L")</span>
+                    </CellDisplayTemplate>
+                </DxGridDataColumn>
 
                 <DxGridDataColumn 
                 FieldName="TipoCombustible" 
-                Caption="Tipo combustible" />
+                Caption="Tipo combustible"
+                TextAlignment="GridTextAlignment.Center">
+                 <HeaderCaptionTemplate>
+                        <i class="bi bi-droplet"></i> Tipo combustible
+                    </HeaderCaptionTemplate>
+                </DxGridDataColumn>
 
                 <DxGridDataColumn 
                 FieldName="Activo" 
-                Caption="Estado">
+                Caption="Estado"
+                TextAlignment="GridTextAlignment.Center">
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-toggle-on"></i> Estado
+                    </HeaderCaptionTemplate>
                     <CellDisplayTemplate>
                         @if ((bool)context.Value)
                         {
@@ -83,11 +114,17 @@
 
                 <DxGridDataColumn 
                 FieldName="FechaCreacion" 
-                Caption="Fecha creación" />
+                Caption="Fecha creación"
+                TextAlignment="GridTextAlignment.Center">
+                    <HeaderCaptionTemplate>
+                            <i class="bi bi-calendar"></i> Fecha creación
+                        </HeaderCaptionTemplate>
+                </DxGridDataColumn>
 
                 <DxGridDataColumn 
                 Caption="Acciones" 
-                Width="120px">
+                Width="120px"
+                TextAlignment="GridTextAlignment.Center">
                     <CellDisplayTemplate>
                         @{
                             var Tanques = (Tanque)context.DataItem;

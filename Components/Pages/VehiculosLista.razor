@@ -47,33 +47,53 @@
         AllowGroup="true" 
         CssClass="shadow-sm"
         ColumnCaptionAlignment="GridTextAlignment.Center" 
-        ShowSearchBox="true">
+        ShowSearchBox="true"
+        HighlightRowOnHover="true">
         
             <Columns>
                 @* <DxGridDataColumn 
                 FieldName="Id" 
                 Caption="ID" 
-                SortOrder="GridColumnSortOrder.Ascending" /> *@
+                SortOrder="GridColumnSortOrder.Ascending" >
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-hash"></i>ID
+                    </HeaderCaptionTemplate>
+                </DxGridDataColumn>  *@
             
                 <DxGridDataColumn 
                 FieldName="Marca" 
-                Caption="Marca" />
-            
-                <DxGridDataColumn 
-                FieldName="Modelo" 
-                Caption="Modelo" />
+                Caption="Marca"
+                TextAlignment="GridTextAlignment.Center" >
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-car-front"></i> Marca
+                    </HeaderCaptionTemplate>
+                </DxGridDataColumn>
 
                 <DxGridDataColumn 
                 FieldName="Matricula" 
-                Caption="Matrícula" />
+                Caption="Matrícula"
+                TextAlignment="GridTextAlignment.Center" >
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-aspect-ratio"></i> Matrícula
+                    </HeaderCaptionTemplate>
+                </DxGridDataColumn>
 
                 <DxGridDataColumn 
                 FieldName="Nombre" 
-                Caption="Chofer" />
-            
+                Caption="Chofer"
+                TextAlignment="GridTextAlignment.Center" >
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-person"></i> Chofer
+                    </HeaderCaptionTemplate>
+                </DxGridDataColumn>
+
                 <DxGridDataColumn 
                 FieldName="Activo" 
-                Caption="Estado">
+                Caption="Estado"
+                TextAlignment="GridTextAlignment.Center" >
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-toggle-on"></i> Estado
+                    </HeaderCaptionTemplate>
                     <CellDisplayTemplate>
                         @if ((bool)context.Value)
                         {
@@ -88,15 +108,26 @@
 
                 <DxGridDataColumn 
                 FieldName="TipoCombustible" 
-                Caption="Tipo combustible" />
+                Caption="Tipo combustible"
+                TextAlignment="GridTextAlignment.Center" >
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-fuel-pump"></i> Tipo combustible
+                    </HeaderCaptionTemplate>
+                </DxGridDataColumn>
 
                 <DxGridDataColumn 
                 FieldName="FechaCreacion" 
-                Caption="Fecha creación" />
-            
+                Caption="Fecha creación"
+                TextAlignment="GridTextAlignment.Center" >
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-calendar"></i> Fecha creación
+                    </HeaderCaptionTemplate>
+                </DxGridDataColumn>
+
                 <DxGridDataColumn 
                 Caption="Acciones" 
-                Width="120px">
+                Width="120px"
+                TextAlignment="GridTextAlignment.Center">
                     <CellDisplayTemplate>
                         @{
                             var Vehiculos = (Vehiculo)context.DataItem;

@@ -47,33 +47,62 @@
         PageSizes="new int[] { 5, 10, 20, 50 }" 
         AllowGroup="true" CssClass="shadow-sm"
         ColumnCaptionAlignment="GridTextAlignment.Center" 
-        ShowSearchBox="true">
+        ShowSearchBox="true"
+        HighlightRowOnHover="true">
         
             <Columns>
-                <DxGridDataColumn 
+                @* <DxGridDataColumn 
                 FieldName="Id" 
                 Caption="ID" 
-                SortOrder="GridColumnSortOrder.Ascending" />
+                SortOrder="GridColumnSortOrder.Ascending" >
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-hash"></i>ID
+                    </HeaderCaptionTemplate>
+                </DxGridDataColumn> *@
             
                 <DxGridDataColumn 
                 FieldName="tanqueCompleto" 
-                Caption="Tanque" />
+                Caption="Tanque"
+                TextAlignment="GridTextAlignment.Center" >
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-fuel-pump"></i> Tanque
+                    </HeaderCaptionTemplate>
+                </DxGridDataColumn>
             
                 <DxGridDataColumn 
                 FieldName="vehiculoCompleto" 
-                Caption="Vehículo" />
+                Caption="Vehículo"
+                TextAlignment="GridTextAlignment.Center" >
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-car-front"></i> Vehículo
+                    </HeaderCaptionTemplate>
+                </DxGridDataColumn>
 
                 <DxGridDataColumn 
                 FieldName="Litros" 
-                Caption="Litros" />
-
+                Caption="Litros"
+                TextAlignment="GridTextAlignment.Center" >
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-droplet"></i> Litros
+                    </HeaderCaptionTemplate>
+                    <CellDisplayTemplate>
+                        <span class="badge bg-success">@($"{context.Value} L")</span>
+                    </CellDisplayTemplate>
+                </DxGridDataColumn>
+    
                 <DxGridDataColumn 
                 FieldName="FechaCreacion" 
-                Caption="Fecha creación" />
+                Caption="Fecha creación"
+                TextAlignment="GridTextAlignment.Center" >
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-calendar"></i> Fecha creación
+                    </HeaderCaptionTemplate>
+                </DxGridDataColumn>
 
                 <DxGridDataColumn 
                 Caption="Acciones" 
-                Width="120px">
+                Width="120px"
+                TextAlignment="GridTextAlignment.Center">
                     <CellDisplayTemplate>
                         @{
                             var Asignacion = (Asignacion)context.DataItem;

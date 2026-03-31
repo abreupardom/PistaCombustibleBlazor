@@ -54,7 +54,13 @@
                              Name="Empleados"
                              ArgumentField="@((EmpleadoEstado e) => e.Estado)"
                              ValueField="@((EmpleadoEstado e) => e.Cantidad)"
-                             Color="System.Drawing.Color.SteelBlue"/>
+                             Color="System.Drawing.Color.SteelBlue">
+                                <DxChartSeriesLabel
+                                 Visible="true"
+                                 Position="RelativePosition.Outside">
+                                    <DxChartSeriesLabelConnector Visible="true" />
+                                </DxChartSeriesLabel>
+                            </DxChartBarSeries>
 
                             <DxChartLegend 
                             Position="RelativePosition.Outside"
@@ -97,7 +103,13 @@
                                 <DxPieChartSeries
                                  Name="Combustible"
                                  ArgumentField="@((TanqueCombustible t) => t.TipoCombustible)"
-                                 ValueField="@((TanqueCombustible t) => t.CapacidadTotal)"/>
+                                 ValueField="@((TanqueCombustible t) => t.CapacidadTotal)">
+                                    <DxChartSeriesLabel
+                                    Visible="true"
+                                    Position="RelativePosition.Outside">
+                                        <DxChartSeriesLabelConnector Visible="true" />
+                                    </DxChartSeriesLabel>
+                                </DxPieChartSeries>
                                 
                               <DxChartLegend 
                                 Position="RelativePosition.Outside"
@@ -146,13 +158,25 @@
                                 Name="Nivel Actual"
                                 ArgumentField="@((TanqueNivel t) => t.Nombre)"
                                 ValueField="@((TanqueNivel t) => t.Nivel)"
-                                Color="System.Drawing.Color.Orange"/>
+                                Color="System.Drawing.Color.Orange">
+                                  <DxChartSeriesLabel
+                                    Visible="true"
+                                    Position="RelativePosition.Outside">
+                                        <DxChartSeriesLabelConnector Visible="true" />
+                                    </DxChartSeriesLabel>
+                                  </DxChartBarSeries>
                                 
                                 <DxChartBarSeries 
                                 Name="Capacidad Máxima"
                                 ArgumentField="@((TanqueNivel t) => t.Nombre)"
                                 ValueField="@((TanqueNivel t) => t.Capacidad)"
-                                Color="System.Drawing.Color.LightGray"/>
+                                Color="System.Drawing.Color.LightGray">
+                                      <DxChartSeriesLabel
+                                    Visible="true"
+                                    Position="RelativePosition.Outside">
+                                        <DxChartSeriesLabelConnector Visible="true" />
+                                    </DxChartSeriesLabel>
+                                </DxChartBarSeries>
                                 
                                 <DxChartLegend 
                                 Position="RelativePosition.Outside"
@@ -194,14 +218,19 @@
                             <DxPieChart  
                                 Data="@datosVehiculosCombustible"
                                 Width="100%"
-                                Height="350px"
-                                InnerDiameter="0.5">
+                                Height="350px">
                                     
                                 <DxPieChartSeries   
                                 Name="Vehículos por Combustible"
                                 ArgumentField="@((VehiculoCombustible v) => v.TipoCombustible)"
-                                ValueField="@((VehiculoCombustible v) => v.Cantidad)"/>
-                                    
+                                ValueField="@((VehiculoCombustible v) => v.Cantidad)">
+                                  <DxChartSeriesLabel
+                                    Visible="true"
+                                    Position="RelativePosition.Outside">
+                                        <DxChartSeriesLabelConnector Visible="true" />
+                                    </DxChartSeriesLabel>
+                                </DxPieChartSeries>
+
                                <DxChartLegend 
                                 Position="RelativePosition.Outside"
                                 HorizontalAlignment="HorizontalAlignment.Center"
@@ -248,7 +277,13 @@
                                 Name="Vehículos"
                                 ArgumentField="@((VehiculoEstado v) => v.Estado)"
                                 ValueField="@((VehiculoEstado v) => v.Cantidad)"
-                                Color="System.Drawing.Color.OrangeRed"/>
+                                Color="System.Drawing.Color.OrangeRed">
+                                  <DxChartSeriesLabel
+                                    Visible="true"
+                                    Position="RelativePosition.Outside">
+                                        <DxChartSeriesLabelConnector Visible="true" />
+                                    </DxChartSeriesLabel>
+                                </DxChartBarSeries>
                                     
                                <DxChartLegend 
                                 Position="RelativePosition.Outside"
@@ -258,12 +293,6 @@
                                 <DxChartTooltip
                                 Enabled="true"/>
                             </DxChart>
-                            
-                            <div class="mt-3 text-center">
-                                <h5>Total de vehículos: <strong>@VehiculoLista.Count</strong></h5>
-                                <p class="text-success mb-0">Activos: @VehiculoLista.Count(v => v.Activo)</p>
-                                <p class="text-danger">Inactivos: @VehiculoLista.Count(v => !v.Activo)</p>
-                            </div>
                         }
                         else
                         {
@@ -276,7 +305,7 @@
             <div class="col-md-6 mb-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-header bg-dark text-white">
-                        <h4 class="mb-0">Top Marcas de Vehículos</h4>
+                        <h4 class="mb-0">Vehículos</h4>
                     </div>
                     <div class="card-body">
                         @{
@@ -306,7 +335,13 @@
                                 Name="Cantidad por Marca"
                                 ArgumentField="@((VehiculoMarca m) => m.Marca)"
                                 ValueField="@((VehiculoMarca m) => m.Cantidad)"
-                                Color="System.Drawing.Color.Purple"/>
+                                Color="System.Drawing.Color.Purple">
+                                    <DxChartSeriesLabel
+                                        Visible="true"
+                                        Position="RelativePosition.Outside">
+                                            <DxChartSeriesLabelConnector Visible="true" />
+                                    </DxChartSeriesLabel>
+                                </DxChartBarSeries>
                                 
                                 <DxChartLegend 
                                 Position="RelativePosition.Outside"

@@ -45,26 +45,45 @@
         PageSizes="new int[] { 5, 10, 20, 50 }" 
         AllowGroup="true" CssClass="shadow-sm"
         ColumnCaptionAlignment="GridTextAlignment.Center" 
-        ShowSearchBox="true">
+        ShowSearchBox="true"
+        HighlightRowOnHover="true">
         
             <Columns>
                 @* <DxGridDataColumn 
                 FieldName="Id" 
                 Caption="ID" 
-                SortOrder="GridColumnSortOrder.Ascending" />
-             *@
+                SortOrder="GridColumnSortOrder.Ascending" >
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-hash"></i>ID
+                    </HeaderCaptionTemplate>
+                </DxGridDataColumn> *@
+
                 <DxGridDataColumn 
                 FieldName="NombreCompleto" 
-                Caption="Nombre Completo" />
+                Caption="Nombre Completo"
+                TextAlignment="GridTextAlignment.Center">
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-file-text"></i> Nombre Completo
+                    </HeaderCaptionTemplate>
+                </DxGridDataColumn>
             
                 <DxGridDataColumn 
                 FieldName="Email" 
-                Caption="Correo Electrónico" />
-            
+                Caption="Correo Electrónico"
+                TextAlignment="GridTextAlignment.Center">
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-envelope"></i> Correo Electrónico
+                    </HeaderCaptionTemplate>
+                </DxGridDataColumn>
+
                 <DxGridDataColumn 
                 FieldName="FechaNacimiento" 
                 Caption="Fecha Nacimiento" 
-                DisplayFormat="dd/MM/yyyy">
+                DisplayFormat="dd/MM/yyyy"
+                TextAlignment="GridTextAlignment.Center">
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-calendar"></i> Fecha Nacimiento
+                    </HeaderCaptionTemplate>
                     <CellDisplayTemplate>
                         @{
                             var fecha = (DateTime?)context.Value;
@@ -76,7 +95,11 @@
                 <DxGridDataColumn 
                 FieldName="Salario" 
                 Caption="Salario" 
-                DisplayFormat="c">
+                DisplayFormat="c"
+                TextAlignment="GridTextAlignment.Center">
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-currency-dollar"></i> Salario
+                    </HeaderCaptionTemplate>
                     <FooterTemplate>
                         <strong class="colorTotal">Total: $@(EmpleadoLista.Sum(e => e.Salario) ?? 0)</strong>
                     </FooterTemplate>
@@ -84,7 +107,11 @@
             
                 <DxGridDataColumn 
                 FieldName="Activo" 
-                Caption="Estado">
+                Caption="Estado"
+                TextAlignment="GridTextAlignment.Center">
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-toggle-on"></i> Estado
+                    </HeaderCaptionTemplate>
                     <CellDisplayTemplate>
                         @if ((bool)context.Value)
                         {
@@ -99,11 +126,17 @@
 
                 <DxGridDataColumn 
                 FieldName="FechaCreacion" 
-                Caption="Fecha creación" />
+                Caption="Fecha creación"
+                TextAlignment="GridTextAlignment.Center">
+                    <HeaderCaptionTemplate>
+                        <i class="bi bi-calendar"></i> Fecha creación
+                    </HeaderCaptionTemplate>
+                </DxGridDataColumn>
             
                 <DxGridDataColumn 
                 Caption="Acciones" 
-                Width="120px">
+                Width="120px"
+                TextAlignment="GridTextAlignment.Center">
                     <CellDisplayTemplate>
                         @{
                             var empleado = (Empleado)context.DataItem;
