@@ -50,10 +50,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/abreupardom/Desktop/PistaCombustible/Components/Pages/Home.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/abreupardom/Desktop/PistaCombustible/Components/Pages/NotFound.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xOb3RGb3VuZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -97,6 +93,10 @@ build_metadata.AdditionalFiles.CssScope = b-4d23tw6j6o
 [C:/Users/abreupardom/Desktop/PistaCombustible/Components/Pages/EmpleadosLista.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFbXBsZWFkb3NMaXN0YS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-wl5yizci68
+
+[C:/Users/abreupardom/Desktop/PistaCombustible/Components/Pages/Home.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-8zwcy95l7t
 
 [C:/Users/abreupardom/Desktop/PistaCombustible/Components/Pages/TanquesLista.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xUYW5xdWVzTGlzdGEucmF6b3I=

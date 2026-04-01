@@ -4581,5 +4581,6 @@ C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\scopedcss\Compon
 C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\scopedcss\Components\Pages\TanquesLista.razor.rz.scp.css
 C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\scopedcss\Components\Pages\VehiculosLista.razor.rz.scp.css
 C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\PistaCombustible.sourcelink.json
-C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\compressed\5xtlbsgta3-{0}-qnrvxqxpid-qnrvxqxpid.gz
-C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\compressed\iah9et9g83-{0}-qnrvxqxpid-qnrvxqxpid.gz
+C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\scopedcss\Components\Pages\Home.razor.rz.scp.css
+C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\compressed\5xtlbsgta3-{0}-155onyngpm-155onyngpm.gz
+C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\compressed\iah9et9g83-{0}-155onyngpm-155onyngpm.gz

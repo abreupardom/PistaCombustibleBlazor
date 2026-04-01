@@ -370,6 +370,9 @@ main[b-cflmhsk695] {
     color: blue;
 }
 
+[b-4d23tw6j6o] .dxbl-btn{
+  border-radius: 20px !important;
+}
 /* /Components/Pages/EmpleadosLista.razor.rz.scp.css */
 .colorTotal[b-wl5yizci68] {
     border-radius: 30px;
@@ -379,12 +382,35 @@ main[b-cflmhsk695] {
     color: blue;
 }
 
+[b-wl5yizci68] .dxbl-btn{
+  border-radius: 20px !important;
+}v[b-wl5yizci68]
+
+/* /Components/Pages/Home.razor.rz.scp.css */
+[b-8zwcy95l7t] .border-activo-card .dxbl-group  {
+  border: 2px solid green !important;
+}
+
+[b-8zwcy95l7t] .border-inactivo-card .dxbl-group  {
+  border: 2px solid red !important;
+}
+
+[b-8zwcy95l7t] .dxbl-btn{
+  border-radius: 20px !important;
+}
+ 
 /* /Components/Pages/TanquesLista.razor.rz.scp.css */
 .totalTanques[b-bvxeg6ayck]{
     color: blue;
+}
+[b-bvxeg6ayck] .dxbl-btn{
+  border-radius: 20px !important;
 }
 /* /Components/Pages/VehiculosLista.razor.rz.scp.css */
 .totalVehiculos[b-oytcn5f956]{
     color: blue;
 }
 
+[b-oytcn5f956] .dxbl-btn{
+  border-radius: 20px !important;
+}

@@ -75,7 +75,6 @@
             </DxButton>
         </div>
     </div>
-     <GlobalToast />
 </div>
 
 @code {
@@ -191,7 +190,6 @@
                     Text = "Asignacion actualizada correctamente.",
                     RenderStyle = ToastRenderStyle.Success
                 });
-                await Task.Delay(1000);
                 Navigation.NavigateTo($"/asignaciones");
             }
             else

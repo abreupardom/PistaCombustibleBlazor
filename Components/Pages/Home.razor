@@ -7,8 +7,9 @@
 @inject EmpleadoService EmpleadoService
 @inject TanqueService TanqueService
 @inject VehiculoService VehiculoService
+@inject NavigationManager Navigation
 
-<PageTitle>Dashboard de Análisis</PageTitle>
+<PageTitle>Detalles y estadísticas</PageTitle>
 
 <div class="container mt-4">
     <div class="row">
@@ -33,26 +34,62 @@
     else
     {
         <!-- Fila 1: Tarjetas de Empleados -->
-        <div class="row">
-            <div class="col-md-6 mb-4">
+       <div class="row">
+            <div class="col-md-3 mb-2 border-activo-card">
                 <DxFormLayout>
                     <DxFormLayoutGroup 
                         Caption="Empleados Activos" 
                         Decoration="FormLayoutGroupDecoration.Card">
                         <DxFormLayoutItem>
-                            <h2 class="text-success display-4">@EmpleadoLista.Count(e => e.Activo)</h2>
+                            <div class="d-flex align-items-center justify-content-center gap-3">
+                                <i class="bi bi-people-fill text-success" style="font-size: 2.5rem;"></i>
+                                <h2 class="text-success display-4 mb-0">@EmpleadoLista.Count(e => e.Activo)</h2>
+                            </div>
                         </DxFormLayoutItem>
                     </DxFormLayoutGroup>
                 </DxFormLayout>
             </div>
 
-            <div class="col-md-6 mb-4">
+            <div class="col-md-3 mb-2 border-inactivo-card">
                 <DxFormLayout>
                     <DxFormLayoutGroup 
                         Caption="Empleados Inactivos" 
                         Decoration="FormLayoutGroupDecoration.Card">
                         <DxFormLayoutItem>
-                            <h2 class="text-danger display-4">@EmpleadoLista.Count(e => !e.Activo)</h2>
+                              <div class="d-flex align-items-center justify-content-center gap-3">
+                                <i class="bi bi-people-fill text-danger" style="font-size: 2.5rem;"></i>
+                                <h2 class="text-danger display-4 mb-0">@EmpleadoLista.Count(e => !e.Activo)</h2>
+                            </div>
+                        </DxFormLayoutItem>
+                    </DxFormLayoutGroup>
+                </DxFormLayout>
+            </div>
+
+            <div class="col-md-3 mb-2 border-activo-card">
+                <DxFormLayout>
+                    <DxFormLayoutGroup 
+                        Caption="Vehículos Activos" 
+                        Decoration="FormLayoutGroupDecoration.Card">
+                        <DxFormLayoutItem>
+                              <div class="d-flex align-items-center justify-content-center gap-3">
+                                <i class="bi bi-car-front-fill text-success" style="font-size: 2.5rem;"></i>
+                                <h2 class="text-success display-4 mb-0">@VehiculoLista.Count(v => v.Activo)</h2>
+                            </div>
+                        </DxFormLayoutItem>
+                    </DxFormLayoutGroup>
+                </DxFormLayout>
+            </div>
+
+            <div class="col-md-3 mb-2 border-inactivo-card">
+                <DxFormLayout>
+                    <DxFormLayoutGroup 
+                        Caption="Vehículos Inactivos" 
+                        Decoration="FormLayoutGroupDecoration.Card">
+                        <DxFormLayoutItem>
+                              <div class="d-flex align-items-center justify-content-center gap-3">
+                                <i class="bi bi-car-front-fill text-danger" style="font-size: 2.5rem;"></i>
+                                <h2 class="text-danger display-4 mb-0">@VehiculoLista.Count(v => !v.Activo)</h2>
+                            </div>
                         </DxFormLayoutItem>
                     </DxFormLayoutGroup>
                 </DxFormLayout>
@@ -64,7 +101,7 @@
             <div class="col-md-6 mb-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-header bg-success text-white">
-                        <h4 class="mb-0">Distribución por Tipo de Combustible (Tanques)</h4>
+                        <h4 class="mb-0">Distribución por tipo de combustible (Tanques)</h4>
                     </div>
                     <div class="card-body">
                         @{
@@ -103,7 +140,12 @@
                                     HorizontalAlignment="HorizontalAlignment.Center" 
                                     VerticalAlignment="VerticalEdge.Bottom" />
     
-                                <DxChartTooltip Enabled="true" />
+                                <DxChartTooltip Enabled="true" >
+                                     <div style="padding: 8px;">
+                                        <div class="fw-bold">@context.Point.Argument</div>
+                                        <div>@($"{context.Point.Value:N0} L")</div>
+                                    </div>
+                                </DxChartTooltip>
                             </DxPieChart>
                         }
                         else
@@ -117,7 +159,7 @@
             <div class="col-md-6 mb-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-header bg-info text-white">
-                        <h4 class="mb-0">Nivel de Combustible por Tanque</h4>
+                        <h4 class="mb-0">Nivel de combustible por tanque</h4>
                     </div>
                     <div class="card-body">
                         @{
@@ -127,7 +169,8 @@
                                 {
                                     Nombre = $"Tanque {t.Id} - {t.TipoCombustible}",
                                     Nivel = t.Nivel ?? 0,
-                                    Capacidad = t.Capacidad ?? 0
+                                    Capacidad = t.Capacidad ?? 0,
+                                    EspacioLibre = (t.Capacidad ?? 0) - (t.Nivel ?? 0)
                                 })
                                 .ToList();
                         }
@@ -138,36 +181,68 @@
                                 Data="@datosNiveles" 
                                 Width="100%" 
                                 Height="350px">
-                                <DxChartBarSeries 
+                                <DxChartStackedBarSeries 
                                     Name="Nivel Actual" 
                                     ArgumentField="@((TanqueNivel t) => t.Nombre)"
                                     ValueField="@((TanqueNivel t) => t.Nivel)" 
                                     Color="System.Drawing.Color.Orange">
                                     <DxChartSeriesLabel 
                                         Visible="true" 
-                                        Position="RelativePosition.Outside">
+                                        Position="RelativePosition.Inside">
                                         <DxChartSeriesLabelConnector Visible="true" />
                                     </DxChartSeriesLabel>
-                                </DxChartBarSeries>
+                                </DxChartStackedBarSeries>
                                 
-                                <DxChartBarSeries 
-                                    Name="Capacidad Máxima" 
+                                <DxChartStackedBarSeries 
+                                    Name="Espacio Libre" 
                                     ArgumentField="@((TanqueNivel t) => t.Nombre)"
-                                    ValueField="@((TanqueNivel t) => t.Capacidad)" 
+                                    ValueField="@((TanqueNivel t) => t.EspacioLibre)" 
                                     Color="System.Drawing.Color.LightGray">
                                     <DxChartSeriesLabel 
                                         Visible="true" 
-                                        Position="RelativePosition.Outside">
+                                        Position="RelativePosition.Inside">
                                         <DxChartSeriesLabelConnector Visible="true" />
                                     </DxChartSeriesLabel>
-                                </DxChartBarSeries>
+                                </DxChartStackedBarSeries>
+
+                                <DxChartStackedBarSeries 
+                                    Name="Capacidad" 
+                                    ArgumentField="@((TanqueNivel t) => t.Nombre)"
+                                    ValueField="@((TanqueNivel t) => t.Capacidad)" 
+                                    Color="System.Drawing.Color.Green">
+                                    <DxChartSeriesLabel 
+                                        Visible="true" 
+                                        Position="RelativePosition.Inside">
+                                        <DxChartSeriesLabelConnector Visible="true" />
+                                    </DxChartSeriesLabel>
+                                </DxChartStackedBarSeries>
                                 
                                 <DxChartLegend 
                                     Position="RelativePosition.Outside"
                                     HorizontalAlignment="HorizontalAlignment.Center" 
                                     VerticalAlignment="VerticalEdge.Bottom" />
-    
-                                <DxChartTooltip Enabled="true" />
+
+                                <DxChartTooltip Enabled="true" >
+                                    <div style="padding: 8px;">
+                                        <div class="fw-bold">@context.Point.Argument</div>
+                                        <div>
+                                            @{
+                                                switch (context.Point.SeriesName)
+                                                {
+                                                    case "Nivel Actual":
+                                                        <div>Nivel Actual: @($"{context.Point.Value:N0} L")</div>;
+                                                        break;
+                                                    case "Espacio Libre":
+                                                        <div>Espacio Libre: @($"{context.Point.Value:N0} L")</div>;
+                                                        break;
+                                                    case "Capacidad":
+                                                        <div>Capacidad: @($"{context.Point.Value:N0} L")</div>;
+                                                        break;
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </DxChartTooltip>
                             </DxChart>
                         }
                         else
@@ -184,7 +259,7 @@
             <div class="col-md-6 mb-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-header bg-warning text-dark">
-                        <h4 class="mb-0">Vehículos por Tipo de Combustible</h4>
+                        <h4 class="mb-0">Vehículos por tipo de combustible</h4>
                     </div>
                     <div class="card-body">
                         @{
@@ -221,7 +296,12 @@
                                     HorizontalAlignment="HorizontalAlignment.Center" 
                                     VerticalAlignment="VerticalEdge.Bottom" />
     
-                                <DxChartTooltip Enabled="true" />
+                                <DxChartTooltip Enabled="true">
+                                    <div style="padding: 8px;">
+                                        <div class="fw-bold">@context.Point.Argument</div>
+                                        <div>Vehículos: @($"{context.Point.Value:N0}")</div>
+                                    </div>
+                                </DxChartTooltip>
                             </DxPieChart>
                         }
                         else
@@ -232,64 +312,10 @@
                 </div>
             </div>
 
-            <div class="col-md-6 mb-4">
-                <div class="card shadow-sm h-100">
-                    <div class="card-header bg-danger text-white">
-                        <h4 class="mb-0">Estado de Vehículos</h4>
-                    </div>
-                    <div class="card-body">
-                        @{
-                            var datosEstadoVehiculos = new List<VehiculoEstado>
-                            {
-                                new VehiculoEstado { Estado = "Activos", Cantidad = VehiculoLista.Count(v => v.Activo) },
-                                new VehiculoEstado { Estado = "Inactivos", Cantidad = VehiculoLista.Count(v => !v.Activo) }
-                            };
-                        }
-                        
-                        @if (VehiculoLista.Any())
-                        {
-                            <DxChart 
-                                Data="@datosEstadoVehiculos" 
-                                Width="100%" 
-                                Height="350px">
-                                <DxChartTitle Text="Cantidad de Vehículos">
-                                    <DxChartSubTitle Text="Vehículos activos e inactivos" />
-                                </DxChartTitle>
-                                <DxChartBarSeries 
-                                    Name="Vehículos" 
-                                    ArgumentField="@((VehiculoEstado v) => v.Estado)"
-                                    ValueField="@((VehiculoEstado v) => v.Cantidad)" 
-                                    Color="System.Drawing.Color.OrangeRed">
-                                    <DxChartSeriesLabel 
-                                        Visible="true" 
-                                        Position="RelativePosition.Outside">
-                                        <DxChartSeriesLabelConnector Visible="true" />
-                                    </DxChartSeriesLabel>
-                                </DxChartBarSeries>
-                                    
-                                <DxChartLegend 
-                                    Position="RelativePosition.Outside"
-                                    HorizontalAlignment="HorizontalAlignment.Center" 
-                                    VerticalAlignment="VerticalEdge.Bottom" />
-  
-                                <DxChartTooltip Enabled="true" />
-                            </DxChart>
-                        }
-                        else
-                        {
-                            <div class="alert alert-warning">No hay vehículos registrados</div>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Fila 4: Marcas de Vehículos (2 columnas) -->
-        <div class="row">
-            <div class="col-md-6 mb-4">
+             <div class="col-md-6 mb-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-header bg-dark text-white">
-                        <h4 class="mb-0">Top 5 Marcas de Vehículos</h4>
+                        <h4 class="mb-0">Vehículos por marca</h4>
                     </div>
                     <div class="card-body">
                         @{
@@ -312,8 +338,8 @@
                                 Data="@datosMarcas" 
                                 Width="100%" 
                                 Height="350px">
-                                <DxChartTitle Text="Marcas de Vehículos">
-                                    <DxChartSubTitle Text="Cantidad de Vehículos por Marca" />
+                                <DxChartTitle Text="Marcas de vehículos">
+                                    <DxChartSubTitle Text="Cantidad de vehículos por marca" />
                                 </DxChartTitle>
                                 <DxChartAreaSeries       
                                     Name="Cantidad por Marca" 
@@ -332,7 +358,12 @@
                                     HorizontalAlignment="HorizontalAlignment.Center" 
                                     VerticalAlignment="VerticalEdge.Bottom" />
   
-                                <DxChartTooltip Enabled="true" />
+                                <DxChartTooltip Enabled="true">
+                                     <div style="padding: 8px;">
+                                        <div class="fw-bold">@context.Point.Argument</div>
+                                        <div>Vehículos: @($"{context.Point.Value:N0} ")</div>
+                                    </div>
+                                </DxChartTooltip>
                             </DxChart>
                         }
                         else
@@ -342,47 +373,13 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-6 mb-4">
-                <div class="card shadow-sm h-100">
-                    <div class="card-header bg-primary text-white">
-                        <h4 class="mb-0">Distribución de Empleados</h4>
-                    </div>
-                    <div class="card-body">
-                        @{
-                            var datosEmpleados = new List<EmpleadoEstado>
-                            {
-                                new EmpleadoEstado { Estado = "Activos", Cantidad = EmpleadoLista.Count(e => e.Activo) },
-                                new EmpleadoEstado { Estado = "Inactivos", Cantidad = EmpleadoLista.Count(e => !e.Activo) }
-                            };
-                        }
-                        
-                        <DxChart 
-                            Data="@datosEmpleados"
-                            Width="100%"
-                            Height="350px">
-                            <DxChartBarSeries
-                                Name="Empleados"
-                                ArgumentField="@((EmpleadoEstado e) => e.Estado)"
-                                ValueField="@((EmpleadoEstado e) => e.Cantidad)"
-                                Color="System.Drawing.Color.SteelBlue">
-                                <DxChartSeriesLabel
-                                    Visible="true"
-                                    Position="RelativePosition.Outside">
-                                    <DxChartSeriesLabelConnector Visible="true" />
-                                </DxChartSeriesLabel>
-                            </DxChartBarSeries>
+        <!-- Fila 4: Marcas de Vehículos (2 columnas) -->
+        <div class="row">
+           
 
-                            <DxChartLegend 
-                                Position="RelativePosition.Outside"
-                                HorizontalAlignment="HorizontalAlignment.Center"
-                                VerticalAlignment="VerticalEdge.Bottom" />
-  
-                            <DxChartTooltip Enabled="true"/>
-                        </DxChart>
-                    </div>
-                </div>
-            </div>
+            
         </div>
 
         <!-- Fila 5: Lista de Vehículos -->
@@ -390,7 +387,14 @@
             <div class="col-md-12 mb-4">
                 <div class="card shadow-sm">
                     <div class="card-header bg-secondary text-white">
-                        <h4 class="mb-0">Lista Detallada de Vehículos</h4>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">Lista detallada de vehículos</h4>
+                            <DxButton 
+                                RenderStyle="ButtonRenderStyle.Light"
+                                Size="ButtonSize.Small" 
+                                IconCssClass="bi bi-plus-circle"
+                                Click="() => AdicionarVehiculo()" />
+                        </div>
                     </div>
                     <div class="card-body">
                         <VehiculosLista 
@@ -408,7 +412,14 @@
             <div class="col-md-12 mb-4">
                 <div class="card shadow-sm">
                     <div class="card-header bg-secondary text-white">
-                        <h4 class="mb-0">Resumen de Tanques</h4>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">Lista detallada de tanques</h4>
+                            <DxButton 
+                                RenderStyle="ButtonRenderStyle.Light"
+                                Size="ButtonSize.Small" 
+                                IconCssClass="bi bi-plus-circle"
+                                Click="() => AdicionarTanque()" />
+                        </div>
                     </div>
                     <div class="card-body">
                         <TanquesLista
@@ -471,6 +482,22 @@
         }
     }
 
+    /// <summary>
+    /// Adiciona Tanques
+    /// </summary>
+    private void AdicionarTanque()
+    {
+        Navigation.NavigateTo($"/tanqueform");
+    }
+
+    /// <summary>
+    /// Adiciona Vehiculos
+    /// </summary>
+    private void AdicionarVehiculo()
+    {
+        Navigation.NavigateTo($"/vehiculoform");
+    }
+
     // Clases auxiliares
     public class EmpleadoEstado
     {
@@ -490,6 +517,7 @@
         public string? Nombre { get; set; }
         public decimal Nivel { get; set; }
         public decimal Capacidad { get; set; }
+        public decimal EspacioLibre { get; set; }
     }
 
     public class VehiculoEstado

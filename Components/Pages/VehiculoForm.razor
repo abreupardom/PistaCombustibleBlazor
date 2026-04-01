@@ -96,7 +96,6 @@
             </DxButton>
         </div>
     </div>
-    <GlobalToast />
 </div>
 
 @code {
@@ -196,7 +195,6 @@
                     Text = "Vehículo actualizado correctamente.",
                     RenderStyle = ToastRenderStyle.Success
                 });
-                await Task.Delay(1000);
                 Navigation.NavigateTo("/vehiculos");
             }
             else

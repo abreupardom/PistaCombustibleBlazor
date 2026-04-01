@@ -1,0 +1,12 @@
+[b-8zwcy95l7t] .border-activo-card .dxbl-group  {
+  border: 2px solid green !important;
+}
+
+[b-8zwcy95l7t] .border-inactivo-card .dxbl-group  {
+  border: 2px solid red !important;
+}
+
+[b-8zwcy95l7t] .dxbl-btn{
+  border-radius: 20px !important;
+}
+ 

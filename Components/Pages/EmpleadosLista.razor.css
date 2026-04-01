@@ -6,3 +6,7 @@
     color: blue;
 }
 
+::deep .dxbl-btn{
+  border-radius: 20px !important;
+}v
+

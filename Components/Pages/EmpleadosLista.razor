@@ -16,7 +16,8 @@
         <h1 class="me-3 mb-0">Lista de empleados</h1>
         <DxButton 
         RenderStyle="ButtonRenderStyle.Primary" 
-        Size="ButtonSize.Small" Click="() => AdicionarEmpleado()"
+        Size="ButtonSize.Small"
+        Click="() => AdicionarEmpleado()"
         IconCssClass="bi bi-plus-circle" />
             
     </div>
@@ -46,6 +47,7 @@
         AllowGroup="true" CssClass="shadow-sm"
         ColumnCaptionAlignment="GridTextAlignment.Center" 
         ShowSearchBox="true"
+        SearchBoxNullText="Buscar..."
         HighlightRowOnHover="true">
         
             <Columns>
