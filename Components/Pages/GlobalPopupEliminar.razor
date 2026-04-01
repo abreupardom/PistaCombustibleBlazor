@@ -2,18 +2,20 @@
 @rendermode InteractiveServer
 
 <DxPopup
-    HeaderText="Advertencia!"
-    @bind-Visible="@PopupVisible"
-    ShowCloseButton="true"
-    ShowFooter="true">
-        <BodyContentTemplate>
-            Estas seguro de eliminar?
-        </BodyContentTemplate>
-        <FooterContentTemplate>
-            <DxButton CssClass="popup-button my-1 ms-2" RenderStyle="ButtonRenderStyle.Primary" Text="OK" Click="()=>EjecutarEliminar()" />
-            <DxButton CssClass="popup-button my-1 ms-2" RenderStyle="ButtonRenderStyle.Secondary" Text="Cancel" Click="@(() => CerrarPopup())" />
-        </FooterContentTemplate>
-    </DxPopup>
+HeaderText="Advertencia!"
+@bind-Visible="@PopupVisible"
+ShowCloseButton="false"
+CloseOnOutsideClick="false"
+CloseOnEscape="false"
+ShowFooter="true">
+    <BodyContentTemplate>
+        Estas seguro de eliminar?
+    </BodyContentTemplate>
+    <FooterContentTemplate>
+        <DxButton CssClass="popup-button my-1 ms-2" RenderStyle="ButtonRenderStyle.Primary" Text="OK" Click="()=>EjecutarEliminar()" />
+        <DxButton CssClass="popup-button my-1 ms-2" RenderStyle="ButtonRenderStyle.Secondary" Text="Cancel" Click="@(() => CerrarPopup())" />
+    </FooterContentTemplate>
+</DxPopup>
 
     @code{
         [Parameter]

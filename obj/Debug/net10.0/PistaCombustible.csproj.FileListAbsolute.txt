@@ -4571,6 +4571,8 @@ C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\compressed\rchap
 C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\compressed\8gl8x0sx5h-{0}-abdmv1u4y3-abdmv1u4y3.gz
 C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\compressed\3xxb3fdrld-{0}-b9228eflpl-b9228eflpl.gz
 C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\compressed\obxrb1pkdu-{0}-2tj1sjhksk-2tj1sjhksk.gz
+C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\compressed\5xtlbsgta3-{0}-wbi5yjl5vp-wbi5yjl5vp.gz
+C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\compressed\iah9et9g83-{0}-wbi5yjl5vp-wbi5yjl5vp.gz
 C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\staticwebassets.build.json
 C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\staticwebassets.build.json.cache
 C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\staticwebassets.development.json
@@ -4582,5 +4584,3 @@ C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\refint\PistaComb
 C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\PistaCombustible.pdb
 C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\PistaCombustible.genruntimeconfig.cache
 C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\ref\PistaCombustible.dll
-C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\compressed\5xtlbsgta3-{0}-wbi5yjl5vp-wbi5yjl5vp.gz
-C:\Users\abreupardom\Desktop\PistaCombustible\obj\Debug\net10.0\compressed\iah9et9g83-{0}-wbi5yjl5vp-wbi5yjl5vp.gz
