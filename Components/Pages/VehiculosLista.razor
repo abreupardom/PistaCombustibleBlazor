@@ -142,7 +142,7 @@
                                 <DxButton 
                                 RenderStyle="ButtonRenderStyle.Danger" 
                                 Size="ButtonSize.Small"
-                                Click="() => EliminarVehiculo(Vehiculos.Id)" 
+                                Click="() => confirmarEliminacion(Vehiculos.Id)" 
                                 IconCssClass="bi bi-trash" />
 
                                 <DxButton 
@@ -162,6 +162,7 @@
         }
     }
     <GlobalToast/>
+    <GlobalPopupEliminar  @bind-PopupVisible="@PopupVisible"  MetodoEliminar="@(async () => await EliminarVehiculo(@id))" />
 </div>
 
 @code {
@@ -174,6 +175,9 @@
     [Parameter]
     public bool verTotal { get; set; } = true;
     IGrid Grid { get; set; }
+    bool PopupVisible { get; set; } = false;
+    int id = 0;
+    EventCallback MetodoEliminar { get; set; }
     private List<Vehiculo> VehiculoLista = new();
 
     protected override async Task OnInitializedAsync()
@@ -198,6 +202,13 @@
         }
     }
 
+    private void confirmarEliminacion(int id)
+    {
+        this.id = id;
+        PopupVisible = true;
+    }
+
+
     /// <summary>
     /// Elimina Vehiculos
     /// </summary>
@@ -207,32 +218,27 @@
     {
         try
         {
-            var confirmado = await JS.InvokeAsync<bool>("confirm", "¿Está seguro de eliminar este Vehiculos?");
-
-            if (confirmado)
+            var success = await Task.Run(() => VehiculoService.DeleteVehiculoFisico(id));
+            if (success)
             {
-                var success = await Task.Run(() => VehiculoService.DeleteVehiculoFisico(id));
-                if (success)
+                await CargarVehiculos();
+                ToastService.ShowToast(new ToastOptions
                 {
-                    await CargarVehiculos();
-                    ToastService.ShowToast(new ToastOptions
-                    {
-                        ProviderName = "Notificacion",
-                        Title = "Información",  
-                        Text = "Vehiculo eliminado correctamente.",
-                        RenderStyle = ToastRenderStyle.Success
-                    }); 
-                }
-                else
+                    ProviderName = "Notificacion",
+                    Title = "Información",  
+                    Text = "Vehículo eliminado correctamente.",
+                    RenderStyle = ToastRenderStyle.Success
+                }); 
+            }
+            else
+            {
+                ToastService.ShowToast(new ToastOptions
                 {
-                    ToastService.ShowToast(new ToastOptions
-                    {
-                        ProviderName = "Notificacion",
-                        Title = "Información",  
-                        Text = "Error al eliminar el Vehiculos.",
-                        RenderStyle = ToastRenderStyle.Danger
-                    }); 
-                }
+                    ProviderName = "Notificacion",
+                    Title = "Información",  
+                    Text = "Error al eliminar el vehículos.",
+                    RenderStyle = ToastRenderStyle.Danger
+                }); 
             }
         }
         catch(Exception ex)
@@ -241,7 +247,7 @@
             {
                 ProviderName = "Notificacion",
                 Title = "Información",  
-                Text = "Error al eliminar el Vehiculos: Esta siendo usado por algun empleado.",
+                Text = "Error al eliminar el vehículos: Esta siendo usado por un empleado." + ex.Message,
                 RenderStyle = ToastRenderStyle.Danger
             });        
         }

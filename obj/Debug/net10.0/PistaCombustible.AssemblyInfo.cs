@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PistaCombustible")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1accf325f8a83d9639d84113272c7ada48da84c8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dfc511ae636746f0d0968b59d1b2a5ba9e17ab41")]
 [assembly: System.Reflection.AssemblyProductAttribute("PistaCombustible")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PistaCombustible")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

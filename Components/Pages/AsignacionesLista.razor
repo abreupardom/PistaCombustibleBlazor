@@ -110,7 +110,7 @@
                             <DxButton 
                             RenderStyle="ButtonRenderStyle.Danger" 
                             Size="ButtonSize.Small"
-                            Click="() => EliminarAsignacion(Asignacion)" 
+                            Click="() => confirmarEliminacion(Asignacion)" 
                             IconCssClass="bi bi-trash" />
 
                             <DxButton 
@@ -126,11 +126,15 @@
         <span class="totalAsignacion d-block mt-3">@AsignacionLista.Count() asignaciones en total</span>
     }
     <GlobalToast/>
+    <GlobalPopupEliminar  @bind-PopupVisible="@PopupVisible"  MetodoEliminar="@(async () => await EliminarAsignacion(@Asignacion))" />
 </div>
 
 @code {
 
     IGrid Grid { get; set; }
+    bool PopupVisible { get; set; } = false;
+    EventCallback MetodoEliminar { get; set; }
+    Asignacion Asignacion = new Asignacion();
     private List<Asignacion> AsignacionLista = new();
 
     protected override async Task OnInitializedAsync()
@@ -155,6 +159,12 @@
         }
     }
 
+    private void confirmarEliminacion(Asignacion asignacion)
+    {
+        this.Asignacion = asignacion;
+        PopupVisible = true;
+    }
+
     /// <summary>
     /// Elimina asignacion
     /// </summary>
@@ -162,10 +172,7 @@
     /// <returns></returns>
     private async Task EliminarAsignacion(Asignacion asignacion)
     {
-        var confirmado = await JS.InvokeAsync<bool>("confirm", "¿Está seguro de eliminar esta asignación?");
-
-        if (confirmado)
-        {
+        try{
             var success = await Task.Run(() => AsignacionService.DeleteAsignacionFisico(asignacion));
             if (success)
             {
@@ -183,6 +190,17 @@
                 await JS.InvokeVoidAsync("alert", "Error al eliminar la asignación");
             }
         }
+        catch(Exception ex)
+        {
+            ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Notificacion",
+                Title = "Información",  
+                Text = "Error al eliminar la asignación: " + ex.Message,
+                RenderStyle = ToastRenderStyle.Danger
+            }); 
+        }
+       
     }
 
     /// <summary>

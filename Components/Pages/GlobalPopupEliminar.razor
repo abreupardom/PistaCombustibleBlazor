@@ -1,0 +1,38 @@
+@using DevExpress.Blazor
+@rendermode InteractiveServer
+
+<DxPopup
+    HeaderText="Advertencia!"
+    @bind-Visible="@PopupVisible"
+    ShowCloseButton="true"
+    ShowFooter="true">
+        <BodyContentTemplate>
+            Estas seguro de eliminar?
+        </BodyContentTemplate>
+        <FooterContentTemplate>
+            <DxButton CssClass="popup-button my-1 ms-2" RenderStyle="ButtonRenderStyle.Primary" Text="OK" Click="()=>EjecutarEliminar()" />
+            <DxButton CssClass="popup-button my-1 ms-2" RenderStyle="ButtonRenderStyle.Secondary" Text="Cancel" Click="@(() => CerrarPopup())" />
+        </FooterContentTemplate>
+    </DxPopup>
+
+    @code{
+        [Parameter]
+       public bool PopupVisible { get; set; } = false;
+        [Parameter]
+        public EventCallback MetodoEliminar { get; set; }
+
+         [Parameter]
+        public EventCallback<bool> PopupVisibleChanged { get; set; } 
+
+        private async Task EjecutarEliminar()
+        {
+            await MetodoEliminar.InvokeAsync();
+            await CerrarPopup();
+            
+        }
+        private async Task CerrarPopup()
+        {
+            PopupVisible = false;
+            await PopupVisibleChanged.InvokeAsync(false);
+        }
+    }

@@ -1,12 +1,16 @@
-::deep .border-activo-card .dxbl-group  {
-  border: 2px solid green !important;
+
+::deep .border-activo-card .dxbl-group {
+    border: 2px solid green !important;
 }
 
-::deep .border-inactivo-card .dxbl-group  {
-  border: 2px solid red !important;
+::deep .border-activo-card .dxbl-group {
+    border: 2px solid green !important;
 }
 
-::deep .dxbl-btn{
-  border-radius: 20px !important;
+::deep .border-inactivo-card .dxbl-group {
+    border: 2px solid red !important;
 }
- 
+
+::deep .dxbl-btn {
+    border-radius: 20px !important;
+}

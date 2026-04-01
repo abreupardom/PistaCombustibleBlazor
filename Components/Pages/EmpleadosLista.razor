@@ -145,7 +145,7 @@
                             <DxButton 
                             RenderStyle="ButtonRenderStyle.Danger" 
                             Size="ButtonSize.Small"
-                            Click="() => EliminarEmpleado(empleado.Id)" 
+                            Click="() => confirmarEliminacion(empleado.Id)" 
                             IconCssClass="bi bi-trash" />
 
                             <DxButton 
@@ -161,10 +161,14 @@
         <span class="totalEmpleado d-block mt-3">@EmpleadoLista.Count() empleados en total</span>
     }
     <GlobalToast/>
+    <GlobalPopupEliminar  @bind-PopupVisible="@PopupVisible"  MetodoEliminar="@(async () => await EliminarEmpleado(@id))" />
 </div>
 
 @code {
     IGrid Grid { get; set; }
+    bool PopupVisible { get; set; } = false;
+    int id = 0;
+    EventCallback MetodoEliminar { get; set; }
     private List<Empleado> EmpleadoLista = new();
 
     protected override async Task OnInitializedAsync()
@@ -189,6 +193,12 @@
         }
     }
 
+    private void confirmarEliminacion(int id)
+    {
+        this.id = id;
+        PopupVisible = true;
+    }
+
     /// <summary>
     /// Elimina empleado
     /// </summary>
@@ -196,10 +206,7 @@
     /// <returns></returns>
     private async Task EliminarEmpleado(int id)
     {
-        var confirmado = await JS.InvokeAsync<bool>("confirm", "¿Está seguro de eliminar este empleado?");
-
-        if (confirmado)
-        {
+        try{
             var success = await Task.Run(() => EmpleadoService.DeleteEmpleadoFisico(id));
             if (success)
             {
@@ -214,8 +221,24 @@
             }
             else
             {
-                await JS.InvokeVoidAsync("alert", "Error al eliminar el empleado");
+               ToastService.ShowToast(new ToastOptions
+                {
+                    ProviderName = "Notificacion",
+                    Title = "Información",  
+                    Text = "Error al eliminar el empleado.",
+                    RenderStyle = ToastRenderStyle.Danger
+                }); 
             }
+         }
+        catch(Exception ex)
+        {
+            ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Notificacion",
+                Title = "Información",  
+                Text = "Error al eliminar el empleado." + ex.Message,
+                RenderStyle = ToastRenderStyle.Danger
+            });        
         }
     }
 

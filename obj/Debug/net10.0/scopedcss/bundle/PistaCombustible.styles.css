@@ -387,18 +387,22 @@ main[b-cflmhsk695] {
 }v[b-wl5yizci68]
 
 /* /Components/Pages/Home.razor.rz.scp.css */
-[b-8zwcy95l7t] .border-activo-card .dxbl-group  {
-  border: 2px solid green !important;
+
+[b-8zwcy95l7t] .border-activo-card .dxbl-group {
+    border: 2px solid green !important;
 }
 
-[b-8zwcy95l7t] .border-inactivo-card .dxbl-group  {
-  border: 2px solid red !important;
+[b-8zwcy95l7t] .border-activo-card .dxbl-group {
+    border: 2px solid green !important;
 }
 
-[b-8zwcy95l7t] .dxbl-btn{
-  border-radius: 20px !important;
+[b-8zwcy95l7t] .border-inactivo-card .dxbl-group {
+    border: 2px solid red !important;
 }
- 
+
+[b-8zwcy95l7t] .dxbl-btn {
+    border-radius: 20px !important;
+}
 /* /Components/Pages/TanquesLista.razor.rz.scp.css */
 .totalTanques[b-bvxeg6ayck]{
     color: blue;
