@@ -50,7 +50,17 @@
                     ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
                     NullText="Seleccione un tipo de combustible"
                     SearchMode="ListSearchMode.AutoSearch"
-                    SearchFilterCondition="ListSearchFilterCondition.Contains"  />
+                    SearchFilterCondition="ListSearchFilterCondition.Contains">
+                     <EmptyDataAreaTemplate Context="emptyContext">
+                        @if (!emptyContext.IsDataLoading) {
+                            <div class="empty-data-area-template">
+                                <div class="d-flex flex-column">
+                                   No hay elementos disponibles.
+                                </div>
+                            </div>
+                        }
+                    </EmptyDataAreaTemplate>
+                </DxComboBox>
             </DxFormLayoutItem>
 
              <DxFormLayoutItem 
@@ -63,7 +73,17 @@
                         ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
                         NullText="Seleccione un empleado" 
                         SearchMode="ListSearchMode.AutoSearch"
-                        SearchFilterCondition="ListSearchFilterCondition.Contains"/>
+                        SearchFilterCondition="ListSearchFilterCondition.Contains">
+                         <EmptyDataAreaTemplate Context="emptyContext">
+                        @if (!emptyContext.IsDataLoading) {
+                            <div class="empty-data-area-template">
+                                <div class="d-flex flex-column">
+                                   No hay elementos disponibles.
+                                </div>
+                            </div>
+                        }
+                    </EmptyDataAreaTemplate>
+                </DxComboBox>
             </DxFormLayoutItem>
 
             <DxFormLayoutItem 
