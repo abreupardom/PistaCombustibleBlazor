@@ -44,7 +44,8 @@
         PageSize="10"
         ShowPageSizeSelector="true" 
         PageSizes="new int[] { 5, 10, 20, 50 }" 
-        AllowGroup="true" CssClass="shadow-sm"
+        AllowGroup="true"
+        CssClass="shadow-sm"
         ColumnCaptionAlignment="GridTextAlignment.Center" 
         ShowSearchBox="true"
         SearchBoxNullText="Buscar..."
@@ -157,6 +158,9 @@
                     </CellDisplayTemplate>
                 </DxGridDataColumn>
             </Columns>
+            <EmptyDataAreaTemplate>
+                <span>No hay elementos disponibles.</span>
+            </EmptyDataAreaTemplate>
         </DxGrid>
         <span class="totalEmpleado d-block mt-3">@EmpleadoLista.Count() empleados en total</span>
     }

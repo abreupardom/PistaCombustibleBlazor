@@ -42,10 +42,12 @@
         Data="AsignacionLista" 
         ShowFilterRow="true" 
         AllowSort="true" 
-        AllowPaging="true" PageSize="10"
+        AllowPaging="true"
+        PageSize="10"
         ShowPageSizeSelector="true" 
         PageSizes="new int[] { 5, 10, 20, 50 }" 
-        AllowGroup="true" CssClass="shadow-sm"
+        AllowGroup="true"
+        CssClass="shadow-sm"
         ColumnCaptionAlignment="GridTextAlignment.Center" 
         ShowSearchBox="true"
         SearchBoxNullText="Buscar..."
@@ -122,6 +124,9 @@
                     </CellDisplayTemplate>
                 </DxGridDataColumn>
             </Columns>
+            <EmptyDataAreaTemplate>
+                <span>No hay elementos disponibles.</span>
+            </EmptyDataAreaTemplate>
         </DxGrid>
         <span class="totalAsignacion d-block mt-3">@AsignacionLista.Count() asignaciones en total</span>
     }
