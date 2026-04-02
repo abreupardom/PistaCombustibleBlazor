@@ -7,6 +7,7 @@
 @inject EmpleadoService EmpleadoService
 @inject TanqueService TanqueService
 @inject VehiculoService VehiculoService
+@inject AsignacionService AsignacionService
 @inject NavigationManager Navigation
 
 <PageTitle>Detalles y estadísticas</PageTitle>
@@ -259,60 +260,62 @@
             <div class="col-md-6 mb-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-header bg-warning text-dark">
-                        <h4 class="mb-0">Vehículos por tipo de combustible</h4>
+                        <h4 class="mb-0">Asignaciones por fecha</h4>
                     </div>
                     <div class="card-body">
                         @{
-                            var datosVehiculosCombustible = VehiculoLista
-                                .Where(v => v.Activo)
-                                .GroupBy(v => v.TipoCombustible ?? "Sin especificar")
-                                .Select(g => new VehiculoCombustible
+                            var datosAsignacionesPorFecha = AsignacionLista
+                                .GroupBy(a => a.FechaCreacion.Date)
+                                .Select(g => new AsignacionFecha  
                                 {
-                                    TipoCombustible = g.Key,
+                                    Fecha = g.Key,
                                     Cantidad = g.Count()
                                 })
+                                .OrderBy(x => x.Fecha)
                                 .ToList();
                         }
-                        
-                        @if (datosVehiculosCombustible.Any())
+                    
+                        @if (datosAsignacionesPorFecha.Any())
                         {
-                            <DxPieChart 
-                                Data="@datosVehiculosCombustible" 
+                            <DxChart 
+                                Data="@datosAsignacionesPorFecha" 
                                 Width="100%" 
                                 Height="350px">
-                                <DxPieChartSeries 
-                                    Name="Vehículos por Combustible"
-                                    ArgumentField="@((VehiculoCombustible v) => v.TipoCombustible)"
-                                    ValueField="@((VehiculoCombustible v) => v.Cantidad)">
+                                
+                                <DxChartSplineSeries   
+                                    Name="Cantidad de asignaciones"
+                                    ArgumentField="@((AsignacionFecha x) => x.Fecha)"
+                                    ValueField="@((AsignacionFecha x) => x.Cantidad)"
+                                    Color="System.Drawing.Color.Orange">
                                     <DxChartSeriesLabel 
                                         Visible="true" 
                                         Position="RelativePosition.Outside">
                                         <DxChartSeriesLabelConnector Visible="true" />
                                     </DxChartSeriesLabel>
-                                </DxPieChartSeries>
+                                </DxChartSplineSeries>
 
                                 <DxChartLegend 
                                     Position="RelativePosition.Outside"
                                     HorizontalAlignment="HorizontalAlignment.Center" 
                                     VerticalAlignment="VerticalEdge.Bottom" />
-    
+
                                 <DxChartTooltip Enabled="true">
                                     <div style="padding: 8px;">
-                                        <div class="fw-bold">@context.Point.Argument</div>
-                                        <div>Vehículos: @($"{context.Point.Value:N0}")</div>
+                                        <div class="fw-bold">Fecha: @(((DateTime)context.Point.Argument).ToString("dd/MM/yyyy"))</div>
+                                        <div>Asignaciones: @($"{context.Point.Value:N0}")</div>
                                     </div>
                                 </DxChartTooltip>
-                            </DxPieChart>
+                            </DxChart>
                         }
                         else
                         {
-                            <div class="alert alert-info">No hay vehículos activos registrados</div>
+                            <div class="alert alert-info">No hay asignaciones registradas</div>
                         }
                     </div>
                 </div>
             </div>
 
-             <div class="col-md-6 mb-4">
+            <div class="col-md-6 mb-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-header bg-dark text-white">
                         <h4 class="mb-0">Vehículos por marca</h4>
@@ -334,37 +337,37 @@
                         
                         @if (datosMarcas.Any())
                         {
-                            <DxChart 
+                            <DxPieChart 
                                 Data="@datosMarcas" 
                                 Width="100%" 
                                 Height="350px">
                                 <DxChartTitle Text="Marcas de vehículos">
                                     <DxChartSubTitle Text="Cantidad de vehículos por marca" />
                                 </DxChartTitle>
-                                <DxChartAreaSeries       
+                                <DxPieChartSeries           
                                     Name="Cantidad por Marca" 
                                     ArgumentField="@((VehiculoMarca m) => m.Marca)"
-                                    ValueField="@((VehiculoMarca m) => m.Cantidad)" 
-                                    Color="System.Drawing.Color.Purple">
+                                    ValueField="@((VehiculoMarca m) => m.Cantidad)">
+                                    
                                     <DxChartSeriesLabel 
                                         Visible="true" 
                                         Position="RelativePosition.Outside">
                                         <DxChartSeriesLabelConnector Visible="true" />
                                     </DxChartSeriesLabel>
-                                </DxChartAreaSeries>
+                                </DxPieChartSeries>
                                 
                                 <DxChartLegend 
                                     Position="RelativePosition.Outside"
                                     HorizontalAlignment="HorizontalAlignment.Center" 
                                     VerticalAlignment="VerticalEdge.Bottom" />
-  
+        
                                 <DxChartTooltip Enabled="true">
-                                     <div style="padding: 8px;">
+                                    <div style="padding: 8px;">
                                         <div class="fw-bold">@context.Point.Argument</div>
-                                        <div>Vehículos: @($"{context.Point.Value:N0} ")</div>
+                                        <div>Vehículos: @($"{context.Point.Value:N0}")</div>
                                     </div>
                                 </DxChartTooltip>
-                            </DxChart>
+                            </DxPieChart>
                         }
                         else
                         {
@@ -373,13 +376,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Fila 4: Marcas de Vehículos (2 columnas) -->
-        <div class="row">
-           
-
-            
         </div>
 
         <!-- Fila 5: Lista de Vehículos -->
@@ -438,12 +434,26 @@
     private List<Empleado> EmpleadoLista = new();
     private List<Tanque> TanqueLista = new();
     private List<Vehiculo> VehiculoLista = new();
+    private List<Asignacion> AsignacionLista = new();
 
     protected override async Task OnInitializedAsync()
     {
         await CargarEmpleados();
         await CargarTanques();
         await CargarVehiculos();
+        await CargarAsignaciones();
+    }
+
+    private async Task CargarAsignaciones()
+    {
+        try
+        {
+            AsignacionLista = await Task.Run(() => AsignacionService.GetAsignaciones());
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar asignaciones: {ex.Message}");
+        }
     }
 
     private async Task CargarEmpleados()
@@ -536,5 +546,11 @@
     {
         public string? Marca { get; set; }
         public int Cantidad { get; set; }
+    }
+
+    public class AsignacionFecha
+    {
+        public DateTime Fecha { get; set; }
+        public int Cantidad { get; set; }        
     }
 }
