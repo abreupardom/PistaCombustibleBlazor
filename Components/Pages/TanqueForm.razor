@@ -15,74 +15,83 @@
     <h1>@(Id == null ? "Crear" : "Editar") tanque</h1>
 
     <div class="card p-4 shadow">
+        <EditForm
+        Model="@tanque" 
+        Context="editContext"
+        OnValidSubmit="@GuardarTanque">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <DxFormLayout CssClass="w-100 demo-form-layout">
+                <DxFormLayoutItem 
+                    Caption="* Capacidad:">
+                    <DxSpinEdit 
+                    @bind-Value="tanque.Capacidad"
+                    NullText="Ingrese una capacidad." />
+                    <ValidationMessage For="@(() => tanque.Capacidad)" />
+                </DxFormLayoutItem>
 
-        <DxFormLayout CssClass="w-100 demo-form-layout">
-            <DxFormLayoutItem 
-                Caption="* Capacidad:">
-                <DxSpinEdit 
-                @bind-Value="tanque.Capacidad"
-                NullText="Ingrese una capacidad." />
-            </DxFormLayoutItem>
+                <DxFormLayoutItem 
+                    Caption="* Nivel:">
+                    <DxSpinEdit 
+                    @bind-Value="tanque.Nivel"
+                    NullText="Ingrese un nivel." />
+                    <ValidationMessage For="@(() => tanque.Nivel)" />
+                </DxFormLayoutItem>
 
-            <DxFormLayoutItem 
-                Caption="* Nivel:">
-                 <DxSpinEdit 
-                 @bind-Value="tanque.Nivel"
-                 NullText="Ingrese un nivel." />
-            </DxFormLayoutItem>
-
-            <DxFormLayoutItem 
-                Caption="* Tipo Combustible:">
-                <DxComboBox 
-                    @bind-Value="tanque.TipoCombustible" 
-                    Data="@tiposCombustible" 
-                    TextFieldName="Nombre" 
-                    ValueFieldName="Valor"
-                    ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                    NullText="Seleccione un tipo de combustible"
-                    SearchMode="ListSearchMode.AutoSearch"
-                    SearchFilterCondition="ListSearchFilterCondition.Contains" >
-                     <EmptyDataAreaTemplate Context="emptyContext">
-                        @if (!emptyContext.IsDataLoading) {
-                            <div class="empty-data-area-template">
-                                <div class="d-flex flex-column">
-                                   No hay elementos disponibles.
+                <DxFormLayoutItem 
+                    Caption="* Tipo Combustible:">
+                    <DxComboBox 
+                        @bind-Value="tanque.TipoCombustible" 
+                        Data="@tiposCombustible" 
+                        TextFieldName="Nombre" 
+                        ValueFieldName="Valor"
+                        ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
+                        NullText="Seleccione un tipo de combustible"
+                        SearchMode="ListSearchMode.AutoSearch"
+                        SearchFilterCondition="ListSearchFilterCondition.Contains" >
+                        <EmptyDataAreaTemplate Context="emptyContext">
+                            @if (!emptyContext.IsDataLoading) {
+                                <div class="empty-data-area-template">
+                                    <div class="d-flex flex-column">
+                                    No hay elementos disponibles.
+                                    </div>
                                 </div>
-                            </div>
-                        }
-                    </EmptyDataAreaTemplate>
-                </DxComboBox>
-            </DxFormLayoutItem>
+                            }
+                        </EmptyDataAreaTemplate>
+                    </DxComboBox>
+                    <ValidationMessage For="@(() => tanque.TipoCombustible)" />
+                </DxFormLayoutItem>
 
-            <DxFormLayoutItem 
-                Caption="Activo:">
-                <DxCheckBox 
-                @bind-Checked="tanque.Activo" 
-                CheckType="CheckType.Switch"
-                LabelPosition="LabelPosition.Left" />
-            </DxFormLayoutItem>
-        </DxFormLayout>
+                <DxFormLayoutItem 
+                    Caption="Activo:">
+                    <DxCheckBox 
+                    @bind-Checked="tanque.Activo" 
+                    CheckType="CheckType.Switch"
+                    LabelPosition="LabelPosition.Left" />
+                </DxFormLayoutItem>
+            </DxFormLayout>
 
-        <div class="w-100 mx-0 mt-3 d-flex gap-2">
-            <DxButton 
-            RenderStyle="ButtonRenderStyle.Primary" 
-            Click="GuardarTanque">
-                <i class="me-2 bi bi-check-circle"></i> Guardar
-            </DxButton>
-            @if (Id == null)
-            {
+            <div class="w-100 mx-0 mt-3 d-flex gap-2">
                 <DxButton 
-                RenderStyle="ButtonRenderStyle.Secondary" 
-                Click="LimpiarFormulario">
-                    <i class="me-2 bi bi-arrow-counterclockwise"></i> Limpiar
+                RenderStyle="ButtonRenderStyle.Primary" 
+                SubmitFormOnClick="true" >
+                    <i class="me-2 bi bi-check-circle"></i> Guardar
                 </DxButton>
-            }
-            <DxButton 
-            RenderStyle="ButtonRenderStyle.Danger" 
-            Click="Cancelar">
-                <i class="me-2 bi bi-x-circle"></i> Cancelar
-            </DxButton>
-        </div>
+                @if (Id == null)
+                {
+                    <DxButton 
+                    RenderStyle="ButtonRenderStyle.Secondary" 
+                    Click="LimpiarFormulario">
+                        <i class="me-2 bi bi-arrow-counterclockwise"></i> Limpiar
+                    </DxButton>
+                }
+                <DxButton 
+                RenderStyle="ButtonRenderStyle.Danger" 
+                Click="Cancelar">
+                    <i class="me-2 bi bi-x-circle"></i> Cancelar
+                </DxButton>
+            </div>
+        </EditForm>
     </div>
 </div>
 

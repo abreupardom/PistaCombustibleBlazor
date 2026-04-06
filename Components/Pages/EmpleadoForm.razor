@@ -16,77 +16,93 @@
     <h1>@(Id == null ? "Crear" : "Editar")  empleado</h1>
 
     <div class="card p-4 shadow">
+       <EditForm
+        Model="@empleado" 
+        Context="editContext"
+        OnValidSubmit="@GuardarEmpleado">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <DxFormLayout 
+            CssClass="w-100 demo-form-layout">
+                <DxFormLayoutItem 
+                Caption="* Nombre:"
+                Field="@nameof(Empleado.Nombre)">
+                    <DxTextBox 
+                    @bind-Text="empleado.Nombre"
+                    NullText="Ingrese un nombre." />
+                    <ValidationMessage For="@(() => empleado.Nombre)" />
+                </DxFormLayoutItem>
 
-        <DxFormLayout 
-        CssClass="w-100 demo-form-layout">
-            <DxFormLayoutItem 
-             Caption="* Nombre:">
-                <DxTextBox 
-                @bind-Text="empleado.Nombre"
-                NullText="Ingrese un nombre." />
-            </DxFormLayoutItem>
+                <DxFormLayoutItem 
+                Caption="* Apellido:"
+                Field="@nameof(Empleado.Apellido)">
+                    <DxTextBox 
+                    @bind-Text="empleado.Apellido"
+                    NullText="Ingrese un apellido." />
+                    <ValidationMessage For="@(() => empleado.Apellido)" />
+                </DxFormLayoutItem>
 
-            <DxFormLayoutItem 
-             Caption="* Apellido:">
-                <DxTextBox 
-                @bind-Text="empleado.Apellido"
-                NullText="Ingrese un apellido." />
-            </DxFormLayoutItem>
+                <DxFormLayoutItem 
+                Caption="* Email:"
+                Field="@nameof(Empleado.Email)">
+                    <DxTextBox 
+                    @bind-Text="empleado.Email"
+                    NullText="Ingrese un correo electrónico válido." />
+                    <ValidationMessage For="@(() => empleado.Email)" />
+                </DxFormLayoutItem>
 
-            <DxFormLayoutItem 
-              Caption="* Email:">
-                <DxTextBox 
-                @bind-Text="empleado.Email"
-                NullText="Ingrese un correo electrónico válido." />
-            </DxFormLayoutItem>
+                <DxFormLayoutItem 
+                Caption="* Fecha de Nacimiento:"
+                Field="@nameof(Empleado.FechaNacimiento)">
+                    <DxDateEdit 
+                    @bind-Date="empleado.FechaNacimiento" 
+                    DisplayFormat="dd/MM/yyyy"
+                    Mask="@DateTimeMask.ShortDate"
+                    NullText="Seleccione una fecha." />
+                    <ValidationMessage For="@(() => empleado.FechaNacimiento)" />
+                </DxFormLayoutItem>
 
-            <DxFormLayoutItem 
-              Caption="* Fecha de Nacimiento:">
-                <DxDateEdit 
-                @bind-Date="empleado.FechaNacimiento" 
-                DisplayFormat="dd/MM/yyyy"
-                Mask="@DateTimeMask.ShortDate"
-                NullText="Seleccione una fecha." />
-            </DxFormLayoutItem>
+                <DxFormLayoutItem 
+                Caption="* Salario:"
+                Field="@nameof(Empleado.Salario)">
+                    <DxSpinEdit 
+                    @bind-Value="empleado.Salario" 
+                    DisplayFormat="c" 
+                    MinValue="0"
+                    NullText="Ingrese un salario." />
+                    <ValidationMessage For="@(() => empleado.Salario)" />
+                </DxFormLayoutItem>
 
-            <DxFormLayoutItem 
-              Caption="* Salario:">
-                <DxSpinEdit 
-                @bind-Value="empleado.Salario" 
-                DisplayFormat="c" 
-                MinValue="0"
-                NullText="Ingrese un salario." />
-            </DxFormLayoutItem>
+                <DxFormLayoutItem 
+                Caption="Activo:">
+                    <DxCheckBox 
+                    @bind-Checked="empleado.Activo" 
+                    CheckType="CheckType.Switch"
+                    LabelPosition="LabelPosition.Left" />
+                </DxFormLayoutItem>
+            </DxFormLayout>
 
-            <DxFormLayoutItem 
-              Caption="Activo:">
-                <DxCheckBox 
-                @bind-Checked="empleado.Activo" 
-                CheckType="CheckType.Switch"
-                LabelPosition="LabelPosition.Left" />
-            </DxFormLayoutItem>
-        </DxFormLayout>
-
-        <div class="w-100 mx-0 mt-3 d-flex gap-2">
-            <DxButton 
-            RenderStyle="ButtonRenderStyle.Primary" 
-            Click="GuardarEmpleado">
-                <i class="me-2 bi bi-check-circle"></i> Guardar
-            </DxButton>
-            @if (Id == null)
-            {
+            <div class="w-100 mx-0 mt-3 d-flex gap-2">
                 <DxButton 
-                RenderStyle="ButtonRenderStyle.Secondary" 
-                Click="LimpiarFormulario">
-                    <i class="me-2 bi bi-arrow-counterclockwise"></i> Limpiar
+                RenderStyle="ButtonRenderStyle.Primary" 
+                SubmitFormOnClick="true" >
+                    <i class="me-2 bi bi-check-circle"></i> Guardar
                 </DxButton>
-            }
-            <DxButton 
-            RenderStyle="ButtonRenderStyle.Danger" 
-            Click="Cancelar"><i
-                class="me-2 bi bi-x-circle"></i>Cancelar
-            </DxButton>
-        </div>
+                @if (Id == null)
+                {
+                    <DxButton 
+                    RenderStyle="ButtonRenderStyle.Secondary" 
+                    Click="LimpiarFormulario">
+                        <i class="me-2 bi bi-arrow-counterclockwise"></i> Limpiar
+                    </DxButton>
+                }
+                <DxButton 
+                RenderStyle="ButtonRenderStyle.Danger" 
+                Click="Cancelar"><i
+                    class="me-2 bi bi-x-circle"></i>Cancelar
+                </DxButton>
+            </div>
+        </EditForm>
     </div>
 </div>
 

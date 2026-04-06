@@ -17,104 +17,115 @@
 
     <div class="card p-4 shadow">
 
-        <DxFormLayout 
-        CssClass="w-100 demo-form-layout">
-            <DxFormLayoutItem 
-              Caption="* Marca:">
-                <DxTextBox 
-                @bind-Text="vehiculo.Marca"
-                NullText="Ingrese una marca." />
-            </DxFormLayoutItem>
+        <EditForm
+        Model="@vehiculo" 
+        Context="editContext">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <DxFormLayout 
+            CssClass="w-100 demo-form-layout">
+                <DxFormLayoutItem 
+                Caption="* Marca:">
+                    <DxTextBox 
+                    @bind-Text="vehiculo.Marca"
+                    NullText="Ingrese una marca." />
+                    <ValidationMessage For="@(() => vehiculo.Marca)" />
+                </DxFormLayoutItem>
 
-            <DxFormLayoutItem 
-                Caption="* Modelo:">
-                <DxTextBox 
-                @bind-Text="vehiculo.Modelo"
-                NullText="Ingrese un modelo." />
-            </DxFormLayoutItem>
+                <DxFormLayoutItem 
+                    Caption="* Modelo:">
+                    <DxTextBox 
+                    @bind-Text="vehiculo.Modelo"
+                    NullText="Ingrese un modelo." />
+                        <ValidationMessage For="@(() => vehiculo.Modelo)" />
+                </DxFormLayoutItem>
 
-            <DxFormLayoutItem 
-             Caption="* Matrícula:">
-                <DxTextBox 
-                @bind-Text="vehiculo.Matricula"
-                NullText="Ingrese una matrícula." />
-            </DxFormLayoutItem>
+                <DxFormLayoutItem 
+                Caption="* Matrícula:">
+                    <DxTextBox 
+                    @bind-Text="vehiculo.Matricula"
+                    NullText="Ingrese una matrícula." />
+                    <ValidationMessage For="@(() => vehiculo.Matricula)" />
+                </DxFormLayoutItem>
 
-            <DxFormLayoutItem 
-              Caption="* Tipo Combustible:">
-                <DxComboBox 
-                    @bind-Value="vehiculo.TipoCombustible" 
-                    Data="@tiposCombustible" 
-                    TextFieldName="Nombre" 
-                    ValueFieldName="Valor"
-                    ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                    NullText="Seleccione un tipo de combustible"
-                    SearchMode="ListSearchMode.AutoSearch"
-                    SearchFilterCondition="ListSearchFilterCondition.Contains">
-                     <EmptyDataAreaTemplate Context="emptyContext">
-                        @if (!emptyContext.IsDataLoading) {
-                            <div class="empty-data-area-template">
-                                <div class="d-flex flex-column">
-                                   No hay elementos disponibles.
-                                </div>
-                            </div>
-                        }
-                    </EmptyDataAreaTemplate>
-                </DxComboBox>
-            </DxFormLayoutItem>
-
-             <DxFormLayoutItem 
-                Caption="* Chofer:">
+                <DxFormLayoutItem 
+                Caption="* Tipo Combustible:">
                     <DxComboBox 
-                        @bind-Value="vehiculo.IdEmpleado" 
-                        Data="@empleados" 
-                        TextFieldName="NombreCompleto" 
-                        ValueFieldName="Id"
+                        @bind-Value="vehiculo.TipoCombustible" 
+                        Data="@tiposCombustible" 
+                        TextFieldName="Nombre" 
+                        ValueFieldName="Valor"
                         ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                        NullText="Seleccione un empleado" 
+                        NullText="Seleccione un tipo de combustible"
                         SearchMode="ListSearchMode.AutoSearch"
                         SearchFilterCondition="ListSearchFilterCondition.Contains">
-                         <EmptyDataAreaTemplate Context="emptyContext">
-                        @if (!emptyContext.IsDataLoading) {
-                            <div class="empty-data-area-template">
-                                <div class="d-flex flex-column">
-                                   No hay elementos disponibles.
+                        <EmptyDataAreaTemplate Context="emptyContext">
+                            @if (!emptyContext.IsDataLoading) {
+                                <div class="empty-data-area-template">
+                                    <div class="d-flex flex-column">
+                                    No hay elementos disponibles.
+                                    </div>
                                 </div>
-                            </div>
-                        }
-                    </EmptyDataAreaTemplate>
-                </DxComboBox>
-            </DxFormLayoutItem>
+                            }
+                        </EmptyDataAreaTemplate>
+                    </DxComboBox>
+                    <ValidationMessage For="@(() => vehiculo.TipoCombustible)" />
+                </DxFormLayoutItem>
 
-            <DxFormLayoutItem 
-            Caption="Activo:">
-                <DxCheckBox 
-                @bind-Checked="vehiculo.Activo" 
-                CheckType="CheckType.Switch"
-                LabelPosition="LabelPosition.Left" />
-            </DxFormLayoutItem>
-        </DxFormLayout>
+                <DxFormLayoutItem 
+                    Caption="* Chofer:" Field="@nameof(Vehiculo.IdEmpleado)">
+                        <DxComboBox 
+                            @bind-Value="vehiculo.IdEmpleado" 
+                            Data="@empleados" 
+                            TextFieldName="NombreCompleto" 
+                            ValueFieldName="Id"
+                            ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
+                            NullText="Seleccione un empleado" 
+                            SearchMode="ListSearchMode.AutoSearch"
+                            SearchFilterCondition="ListSearchFilterCondition.Contains">
+                            <EmptyDataAreaTemplate Context="emptyContext">
+                            @if (!emptyContext.IsDataLoading) {
+                                <div class="empty-data-area-template">
+                                    <div class="d-flex flex-column">
+                                    No hay elementos disponibles.
+                                    </div>
+                                </div>
+                            }
+                        </EmptyDataAreaTemplate>
+                    </DxComboBox>
+                    <ValidationMessage For="@(() => vehiculo.IdEmpleado)" />
+                </DxFormLayoutItem>
 
-        <div class="w-100 mx-0 mt-3 d-flex gap-2">
-            <DxButton 
-            RenderStyle="ButtonRenderStyle.Primary" 
-            Click="GuardarVehiculo">
-                <i class="me-2 bi bi-check-circle"></i> Guardar
-            </DxButton>
-            @if (Id == null)
-            {
+                <DxFormLayoutItem 
+                Caption="Activo:">
+                    <DxCheckBox 
+                    @bind-Checked="vehiculo.Activo" 
+                    CheckType="CheckType.Switch"
+                    LabelPosition="LabelPosition.Left" />
+                </DxFormLayoutItem>
+            </DxFormLayout>
+
+            <div class="w-100 mx-0 mt-3 d-flex gap-2">
                 <DxButton 
-                RenderStyle="ButtonRenderStyle.Secondary" 
-                Click="LimpiarFormulario">
-                    <i class="me-2 bi bi-arrow-counterclockwise"></i> Limpiar
+                RenderStyle="ButtonRenderStyle.Primary" 
+                SubmitFormOnClick="true" >
+                    <i class="me-2 bi bi-check-circle"></i> Guardar
                 </DxButton>
-            }
-            <DxButton 
-            RenderStyle="ButtonRenderStyle.Danger" 
-            Click="Cancelar">
-                <i class="me-2 bi bi-x-circle"></i> Cancelar
-            </DxButton>
-        </div>
+                @if (Id == null)
+                {
+                    <DxButton 
+                    RenderStyle="ButtonRenderStyle.Secondary" 
+                    Click="LimpiarFormulario">
+                        <i class="me-2 bi bi-arrow-counterclockwise"></i> Limpiar
+                    </DxButton>
+                }
+                <DxButton 
+                RenderStyle="ButtonRenderStyle.Danger" 
+                Click="Cancelar">
+                    <i class="me-2 bi bi-x-circle"></i> Cancelar
+                </DxButton>
+            </div>
+        </EditForm>
     </div>
 </div>
 
